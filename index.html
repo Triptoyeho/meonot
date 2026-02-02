@@ -1835,7 +1835,7 @@
                     exportBtns.forEach(btn => btn.style.display = 'none');
 
                     await new Promise(r => setTimeout(r, 50));
-                    const canvas = await html2canvas(group.element, { scale: 2.5, backgroundColor: '#ffffff' });
+                    const canvas = await html2canvas(group.element, { scale: 1.6, backgroundColor: '#ffffff' });
                     exportBtns.forEach(btn => btn.style.display = 'flex');
 
                     const imgWidth = pageWidth - 20;
