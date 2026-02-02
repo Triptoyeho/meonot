@@ -1838,16 +1838,32 @@
                     const canvas = await html2canvas(group.element, { scale: 1.6, backgroundColor: '#ffffff' });
                     exportBtns.forEach(btn => btn.style.display = 'flex');
 
-                    const imgWidth = pageWidth - 20;
+                    const imgData = canvas.toDataURL('image/jpeg', 0.95);
+                    
+                    // גבולות עמוד
+                    const maxWidth  = pageWidth - 20;
+                    const maxHeight = pageHeight - 40;
+                    
+                    // התאמה פרופורציונלית (בלי דחיסה)
+                    let imgWidth  = maxWidth;
                     let imgHeight = (canvas.height * imgWidth) / canvas.width;
-                    if (imgHeight > pageHeight - 20) {
-                        imgHeight = pageHeight - 20;
+                    
+                    if (imgHeight > maxHeight) {
+                        imgHeight = maxHeight;
+                        imgWidth  = (canvas.width * imgHeight) / canvas.height;
                     }
-
+                    
+                    // מרכז אופקי, רווח עליון
+                    const x = (pageWidth - imgWidth) / 2;
+                    const y = 10;
+                    
                     if (i > 0) pdf.addPage();
-                    pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 10, 10, imgWidth, imgHeight);
+                    pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+                    
+                    // לוגואים – פינה שמאלית תחתונה
                     pdf.addImage('drech_hakesher.jpg', 'JPEG', 10, pageHeight - 35, 30, 30);
                     pdf.addImage('link_car.png', 'PNG', 45, pageHeight - 30, 40, 16);
+
 
                 }
 
