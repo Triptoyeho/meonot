@@ -1,0 +1,836 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ניתוח אבני דרך התפתחותיות</title>
+    <link href="https://fonts.googleapis.com/css2?family=Heebo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Heebo', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
+            min-height: 100vh;
+            direction: rtl;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .header h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
+
+        /* Upload Card */
+        .upload-card {
+            background: white;
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            text-align: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .upload-area {
+            border: 3px dashed #d1d5db;
+            border-radius: 20px;
+            padding: 60px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
+        }
+
+        .upload-area:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f1ff 0%, #e8e9ff 100%);
+            transform: scale(1.01);
+        }
+
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(102, 126, 234, 0); }
+        }
+
+        .upload-icon svg {
+            width: 40px;
+            height: 40px;
+            fill: white;
+        }
+
+        .upload-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
+
+        .upload-subtext {
+            font-size: 0.95rem;
+            color: #9ca3af;
+        }
+
+        #fileInput { display: none; }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .dashboard.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .class-section {
+            border-right: 4px solid #667eea;
+            padding-right: 20px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .stat-badge.boys {
+            background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
+            color: #1e40af;
+        }
+
+        .stat-badge.girls {
+            background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%);
+            color: #be185d;
+        }
+
+        .stat-badge.age {
+            background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+            color: #065f46;
+        }
+
+        .stat-badge.total {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 18px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .data-table th:first-child { border-radius: 0 12px 0 0; }
+        .data-table th:last-child { border-radius: 12px 0 0 0; }
+
+        .data-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+        }
+
+        .data-table tr:hover td { background: #f9fafb; }
+
+        .percentage-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1s ease-out;
+        }
+
+        .color-social { background: linear-gradient(90deg, #c4b5fd 0%, #a78bfa 100%); }
+        .color-language { background: linear-gradient(90deg, #fdba74 0%, #fb923c 100%); }
+        .color-gross { background: linear-gradient(90deg, #7dd3fc 0%, #38bdf8 100%); }
+        .color-fine { background: linear-gradient(90deg, #86efac 0%, #4ade80 100%); }
+
+        /* Buttons */
+        .buttons-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .btn-save {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+        }
+
+        .btn-save:hover {
+            box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3);
+        }
+
+        .btn-pdf {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+
+        .btn-pdf:hover {
+            box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3);
+        }
+
+        .btn-reset {
+            background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
+            color: white;
+        }
+
+        .btn-reset:hover {
+            box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active { display: block; }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 { font-size: 2rem; }
+            .upload-card { padding: 30px; }
+            .chart-container { height: 280px; }
+            .stats-row { gap: 10px; }
+            .stat-badge { font-size: 0.85rem; padding: 10px 15px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1>📊 ניתוח אבני דרך התפתחותיות</h1>
+            <p>העלה קובץ CSV או Excel לניתוח מעון וכיתות</p>
+        </header>
+
+        <div class="upload-card" id="uploadCard">
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">
+                    <svg viewBox="0 0 24 24"><path d="M19.35 10.04C18.67 6.59 15.64 4 12 4 9.11 4 6.6 5.64 5.35 8.04 2.34 8.36 0 10.91 0 14c0 3.31 2.69 6 6 6h13c2.76 0 5-2.24 5-5 0-2.64-2.05-4.78-4.65-4.96zM14 13v4h-4v-4H7l5-5 5 5h-3z"/></svg>
+                </div>
+                <p class="upload-text">גרור קובץ לכאן או לחץ לבחירה</p>
+                <p class="upload-subtext">תומך ב-CSV ו-Excel (.xlsx, .xls)</p>
+            </div>
+            <input type="file" id="fileInput" accept=".csv,.xlsx,.xls">
+        </div>
+
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+            <p>מעבד את הנתונים...</p>
+        </div>
+
+        <div class="dashboard" id="dashboard"></div>
+
+        <footer class="footer">
+            <p>כלי ניתוח אבני דרך התפתחותיות | נבנה עם ❤️</p>
+        </footer>
+    </div>
+
+    <script>
+        const { jsPDF } = window.jspdf;
+        
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadCard = document.getElementById('uploadCard');
+        const loading = document.getElementById('loading');
+        const dashboard = document.getElementById('dashboard');
+
+        let allData = null;
+        let orgName = '';
+        let charts = {};
+        let sectionsData = {};
+
+        const hebrewNames = {
+            'UnusualSocial': 'חברה',
+            'UnusualFineMotor': 'מוטוריקה עדינה',
+            'UnusualLanguage': 'שפה',
+            'UnusualGrossMotor': 'מוטוריקה גסה'
+        };
+
+        const colors = {
+            'חברה': { bg: 'rgba(196, 181, 253, 0.8)', border: '#a78bfa' },
+            'שפה': { bg: 'rgba(253, 186, 116, 0.8)', border: '#fb923c' },
+            'מוטוריקה גסה': { bg: 'rgba(125, 211, 252, 0.8)', border: '#38bdf8' },
+            'מוטוריקה עדינה': { bg: 'rgba(134, 239, 172, 0.8)', border: '#4ade80' }
+        };
+
+        const colorClasses = {
+            'חברה': 'color-social',
+            'שפה': 'color-language',
+            'מוטוריקה גסה': 'color-gross',
+            'מוטוריקה עדינה': 'color-fine'
+        };
+
+        // Event Listeners
+        uploadArea.addEventListener('click', () => fileInput.click());
+        uploadArea.addEventListener('dragover', (e) => { e.preventDefault(); uploadArea.classList.add('dragover'); });
+        uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('dragover'));
+        uploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            uploadArea.classList.remove('dragover');
+            if (e.dataTransfer.files[0]) processFile(e.dataTransfer.files[0]);
+        });
+        fileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) processFile(e.target.files[0]);
+        });
+
+        function processFile(file) {
+            uploadCard.style.display = 'none';
+            loading.classList.add('active');
+
+            const reader = new FileReader();
+            
+            if (file.name.endsWith('.csv')) {
+                reader.onload = (e) => {
+                    Papa.parse(e.target.result, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: (results) => analyzeData(results.data)
+                    });
+                };
+                reader.readAsText(file);
+            } else {
+                reader.onload = (e) => {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet);
+                    analyzeData(jsonData);
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function analyzeData(data) {
+            allData = data.filter(row => 
+                row['PatientAgeInCompleted'] !== undefined && 
+                !isNaN(Number(row['PatientAgeInCompleted']))
+            );
+
+            if (allData.length === 0) {
+                alert('לא נמצאו נתונים תקינים');
+                loading.classList.remove('active');
+                uploadCard.style.display = 'block';
+                return;
+            }
+
+            orgName = allData[0]['org_name'] || 'מעון';
+            const classes = [...new Set(allData.map(row => row['clinic_name']))];
+
+            setTimeout(() => {
+                loading.classList.remove('active');
+                buildDashboard(classes);
+            }, 500);
+        }
+
+        function getStats(data) {
+            return {
+                total: data.length,
+                boys: data.filter(r => Number(r['gender']) === 1).length,
+                girls: data.filter(r => Number(r['gender']) === 2).length,
+                minAge: Math.min(...data.map(r => Number(r['PatientAgeInCompleted']))),
+                maxAge: Math.max(...data.map(r => Number(r['PatientAgeInCompleted'])))
+            };
+        }
+
+        function calculatePercentages(data) {
+            const total = data.length;
+            const results = {};
+            const unusualColumns = ['UnusualSocial', 'UnusualFineMotor', 'UnusualLanguage', 'UnusualGrossMotor'];
+            
+            unusualColumns.forEach(col => {
+                let zeroCount = 0;
+                data.forEach(row => {
+                    if (Number(row[col]) === 0) zeroCount++;
+                });
+                results[hebrewNames[col]] = {
+                    percentage: (zeroCount / total) * 100,
+                    count: zeroCount,
+                    total: total
+                };
+            });
+            return results;
+        }
+
+        function buildDashboard(classes) {
+            dashboard.innerHTML = '';
+            charts = {};
+            sectionsData = {};
+
+            // כללי
+            const generalSection = createSection('general', `אבני דרך התפתחותיות בהן עמדו ילדי מעון "${orgName}"`, allData);
+            dashboard.appendChild(generalSection);
+
+            // כיתות
+            classes.forEach((className, index) => {
+                const classData = allData.filter(r => r['clinic_name'] === className);
+                const classSection = createSection(`class_${index}`, `אבני דרך התפתחותיות בהן עמדו ילדי כיתה "${className}"`, classData, true);
+                dashboard.appendChild(classSection);
+            });
+
+            // כפתורים ראשיים
+            const mainButtons = document.createElement('div');
+            mainButtons.className = 'section';
+            mainButtons.innerHTML = `
+                <div class="buttons-row">
+                    <button class="btn btn-pdf" onclick="savePDF()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M14 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8l-6-6zM6 20V4h7v5h5v11H6z"/></svg>
+                        שמור הכל כ-PDF
+                    </button>
+                    <button class="btn btn-reset" onclick="resetDashboard()">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+                        העלה קובץ חדש
+                    </button>
+                </div>
+            `;
+            dashboard.appendChild(mainButtons);
+
+            dashboard.classList.add('active');
+
+            // יצירת גרפים
+            setTimeout(() => {
+                Object.keys(sectionsData).forEach(key => {
+                    createChart(key, sectionsData[key]);
+                });
+            }, 100);
+        }
+
+        function createSection(id, title, data, isClass = false) {
+            const stats = getStats(data);
+            const percentages = calculatePercentages(data);
+            sectionsData[id] = { data, stats, percentages, title };
+
+            const section = document.createElement('div');
+            section.className = `section ${isClass ? 'class-section' : ''}`;
+            section.id = `section_${id}`;
+
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+
+            section.innerHTML = `
+                <h2 class="section-title">${title}</h2>
+                
+                <div class="stats-row">
+                    <span class="stat-badge total">סה"כ: ${stats.total}</span>
+                    <span class="stat-badge boys">👦 בנים: ${stats.boys}</span>
+                    <span class="stat-badge girls">👧 בנות: ${stats.girls}</span>
+                    <span class="stat-badge age">📅 גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}</span>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="chart_${id}"></canvas>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>קטגוריה</th>
+                            <th>אחוז עמידה</th>
+                            <th>כמות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${order.map(name => `
+                            <tr>
+                                <td><strong>${name}</strong></td>
+                                <td>
+                                    <div class="percentage-bar">
+                                        <div class="bar-container">
+                                            <div class="bar-fill ${colorClasses[name]}" style="width: ${percentages[name].percentage}%"></div>
+                                        </div>
+                                        <span>${percentages[name].percentage.toFixed(1)}%</span>
+                                    </div>
+                                </td>
+                                <td>${percentages[name].count} / ${percentages[name].total}</td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+
+                <div class="buttons-row">
+                    <button class="btn btn-save" onclick="saveSection('${id}')">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg>
+                        שמור כתמונה
+                    </button>
+                </div>
+            `;
+
+            return section;
+        }
+
+        function createChart(id, sectionData) {
+            const ctx = document.getElementById(`chart_${id}`).getContext('2d');
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+            const percentages = sectionData.percentages;
+
+            charts[id] = new Chart(ctx, {
+                type: 'bar',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: order,
+                    datasets: [{
+                        data: order.map(name => percentages[name].percentage),
+                        backgroundColor: order.map(name => colors[name].bg),
+                        borderColor: order.map(name => colors[name].border),
+                        borderWidth: 3,
+                        borderRadius: 8,
+                        barThickness: 60
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#333',
+                            font: { size: 13, weight: 'bold', family: 'Heebo' },
+                            formatter: (value) => value.toFixed(1) + '%'
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: (v) => v + '%', font: { size: 11, family: 'Heebo' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 12, family: 'Heebo', weight: '600' } },
+                            grid: { display: false }
+                        }
+                    }
+                }
+            });
+        }
+
+        function saveSection(id) {
+            const sectionData = sectionsData[id];
+            const canvas = document.getElementById(`chart_${id}`);
+            
+            const tempCanvas = document.createElement('canvas');
+            const ctx = tempCanvas.getContext('2d');
+            
+            const width = 900;
+            const chartHeight = 350;
+            const tableHeight = 250;
+            const padding = 40;
+            
+            tempCanvas.width = width;
+            tempCanvas.height = chartHeight + tableHeight + padding * 3 + 80;
+            
+            // רקע לבן
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            // כותרת
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 22px Heebo, Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(sectionData.title, width / 2, padding + 10);
+            
+            // סטטיסטיקות
+            const stats = sectionData.stats;
+            ctx.font = '14px Heebo, Arial';
+            ctx.fillStyle = '#4b5563';
+            ctx.fillText(`סה"כ: ${stats.total}  |  בנים: ${stats.boys}  |  בנות: ${stats.girls}  |  גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}`, width / 2, padding + 40);
+            
+            // גרף
+            ctx.drawImage(canvas, (width - 800) / 2, padding + 60, 800, chartHeight - 60);
+            
+            // טבלה
+            drawTable(ctx, sectionData.percentages, padding, chartHeight + padding + 60, width - padding * 2);
+            
+            // הורדה
+            const link = document.createElement('a');
+            const safeName = sectionData.title.replace(/[^א-תa-zA-Z0-9]/g, '_');
+            link.download = `${safeName}.png`;
+            link.href = tempCanvas.toDataURL('image/png', 1.0);
+            link.click();
+        }
+
+        function drawTable(ctx, percentages, x, y, width) {
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+            const rowHeight = 40;
+            const headerHeight = 40;
+            
+            const barColors = {
+                'חברה': '#c4b5fd',
+                'שפה': '#fdba74',
+                'מוטוריקה גסה': '#7dd3fc',
+                'מוטוריקה עדינה': '#86efac'
+            };
+            
+            // כותרת טבלה
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(x, y, width, headerHeight);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 14px Heebo, Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText('קטגוריה', x + 150, y + 26);
+            ctx.fillText('אחוז עמידה', x + width / 2 + 50, y + 26);
+            ctx.fillText('כמות', x + width - 30, y + 26);
+            
+            // שורות
+            order.forEach((name, i) => {
+                const rowY = y + headerHeight + (i * rowHeight);
+                const data = percentages[name];
+                
+                ctx.fillStyle = i % 2 === 0 ? '#f9fafb' : 'white';
+                ctx.fillRect(x, rowY, width, rowHeight);
+                
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, rowY + rowHeight);
+                ctx.lineTo(x + width, rowY + rowHeight);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 13px Heebo, Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(name, x + 150, rowY + 26);
+                
+                // בר
+                const barX = x + 180;
+                const barWidth = 200;
+                ctx.fillStyle = '#e5e7eb';
+                ctx.fillRect(barX, rowY + 14, barWidth, 12);
+                ctx.fillStyle = barColors[name];
+                ctx.fillRect(barX, rowY + 14, (data.percentage / 100) * barWidth, 12);
+                
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 13px Heebo, Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(data.percentage.toFixed(1) + '%', barX + barWidth + 15, rowY + 26);
+                
+                ctx.textAlign = 'right';
+                ctx.font = '13px Heebo, Arial';
+                ctx.fillText(`${data.count} / ${data.total}`, x + width - 30, rowY + 26);
+            });
+            
+            // מסגרת
+            ctx.strokeStyle = '#d1d5db';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, headerHeight + order.length * rowHeight);
+        }
+
+        async function savePDF() {
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const keys = Object.keys(sectionsData);
+            
+            for (let i = 0; i < keys.length; i++) {
+                const id = keys[i];
+                const sectionData = sectionsData[id];
+                const canvas = document.getElementById(`chart_${id}`);
+                
+                if (i > 0) pdf.addPage();
+                
+                // יצירת תמונה זמנית
+                const tempCanvas = document.createElement('canvas');
+                const ctx = tempCanvas.getContext('2d');
+                
+                tempCanvas.width = 900;
+                tempCanvas.height = 700;
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                // כותרת
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 22px Heebo, Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(sectionData.title, 450, 40);
+                
+                // סטטיסטיקות
+                const stats = sectionData.stats;
+                ctx.font = '14px Heebo, Arial';
+                ctx.fillStyle = '#4b5563';
+                ctx.fillText(`סה"כ: ${stats.total}  |  בנים: ${stats.boys}  |  בנות: ${stats.girls}  |  גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}`, 450, 70);
+                
+                // גרף
+                ctx.drawImage(canvas, 50, 90, 800, 300);
+                
+                // טבלה
+                drawTable(ctx, sectionData.percentages, 50, 420, 800);
+                
+                // הוספה ל-PDF
+                const imgData = tempCanvas.toDataURL('image/png', 1.0);
+                pdf.addImage(imgData, 'PNG', 10, 10, 190, 148);
+            }
+            
+            pdf.save(`דוח_מעון_${orgName}.pdf`);
+        }
+
+        function resetDashboard() {
+            dashboard.classList.remove('active');
+            dashboard.innerHTML = '';
+            uploadCard.style.display = 'block';
+            fileInput.value = '';
+            charts = {};
+            sectionsData = {};
+            allData = null;
+        }
+    </script>
+</body>
+</html>
