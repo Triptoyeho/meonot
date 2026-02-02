@@ -509,78 +509,243 @@
             }
         }
 
-        function milestonesAnalyzeData(data) {
-            milestonesAllData = data.filter(row =>
-                row['PatientAgeInCompleted'] !== undefined &&
-                row['PatientAgeInCompleted'] !== '' &&
-                !isNaN(Number(row['PatientAgeInCompleted']))
-            );
+        function readFileText(file, encoding = 'UTF-8') {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => resolve(e.target.result);
+        reader.onerror = (e) => reject(e);
+        try {
+            reader.readAsText(file, encoding);
+        } catch (err) {
+            reject(err);
+        }
+    });
+}
 
-            if (!milestonesAllData || milestonesAllData.length === 0) {
-                alert('לא נמצאו נתונים תקינים');
-                milestonesLoading.classList.remove('active');
-                milestonesUploadCard.style.display = 'block';
-                return;
+/* -- detect columns by heuristics from headers array -- */
+function detectColumns(headers) {
+    const lower = headers.map(h => (h||'').toString().trim().toLowerCase());
+
+    const pick = (candidates) => {
+        for (let cand of candidates) {
+            const s = cand.toLowerCase();
+            for (let i = 0; i < lower.length; i++) {
+                if (lower[i].includes(s)) return headers[i];
+            }
+        }
+        return null;
+    };
+
+    const ageField = pick(['patientageincompleted','patient_age_in_completed','age','age_in_months','גיל','גיל_בחודשים','age_months']);
+    const orgField = pick(['org_name','org','organization','מעון','שם_המעון','orgname']);
+    const clinicField = pick(['clinic_name','clinic','class','כיתה','clinicname']);
+    const genderField = pick(['gender','sex','מגדר','gender_id']);
+
+    // detect unusual columns by keyword matches
+    const mapUnusual = {};
+    headers.forEach(h => {
+        const key = (h||'').toString().toLowerCase();
+        if (key.includes('social') || key.includes('חברה') || key.includes('social')) mapUnusual['UnusualSocial'] = h;
+        if (key.includes('language') || key.includes('שפה')) mapUnusual['UnusualLanguage'] = h;
+        if (key.includes('fine') || key.includes('עדינה') || key.includes('fine motor') || key.includes('motòr')) mapUnusual['UnusualFineMotor'] = h;
+        if (key.includes('gross') || key.includes('גסה') || key.includes('gross motor')) mapUnusual['UnusualGrossMotor'] = h;
+    });
+
+    return { ageField, orgField, clinicField, genderField, mapUnusual };
+}
+
+/* -- safe numeric parse -- */
+function toNumber(v) {
+    if (v === undefined || v === null) return NaN;
+    let s = v.toString().trim();
+    // remove thousands separators, swap comma decimal if needed
+    // if contains both comma and dot assume dot decimal and remove commas
+    if (s.indexOf(',') !== -1 && s.indexOf('.') === -1) s = s.replace(',', '.');
+    s = s.replace(/\s+/g, '');
+    s = s.replace(/,/g, ''); // remove leftover commas
+    // remove non-digit except dot and minus
+    s = s.replace(/[^0-9.\-]/g, '');
+    const n = Number(s);
+    return isNaN(n) ? NaN : n;
+}
+
+/* -- REPLACEMENT: milestonesProcessFile with encoding & delimiter fallback and debug output -- */
+async function milestonesProcessFile(file) {
+    milestonesUploadCard.style.display = 'none';
+    milestonesLoading.classList.add('active');
+
+    // helper to show debug area
+    function showDebug(html) {
+        let dbg = document.getElementById('milestonesDebug');
+        if (!dbg) {
+            dbg = document.createElement('div');
+            dbg.id = 'milestonesDebug';
+            dbg.className = 'section';
+            dbg.style.background = '#fffefc';
+            dbg.style.border = '1px dashed #ffd';
+            dbg.style.marginTop = '10px';
+            milestonesDashboard.parentNode.insertBefore(dbg, milestonesDashboard.nextSibling);
+        }
+        dbg.innerHTML = html;
+    }
+
+    try {
+        if (file.name.toLowerCase().endsWith('.csv')) {
+            // try utf-8 first
+            let text = await readFileText(file, 'UTF-8');
+
+            // quick parse to detect headers
+            let results = Papa.parse(text, { header: true, skipEmptyLines: true, preview: 5 });
+            // if it seems like single column with semicolons, try semicolon delimiter
+            const headerKeys = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
+            const singleHeader = headerKeys.length === 1 && headerKeys[0] && headerKeys[0].includes(';');
+
+            if (singleHeader) {
+                // reparse with delimiter ;
+                results = Papa.parse(text, { header: true, skipEmptyLines: true, delimiter: ';' });
             }
 
-            milestonesOrgName = milestonesAllData[0]['org_name'] || 'מעון';
-            const classes = [...new Set(milestonesAllData.map(row => row['clinic_name'] || 'לא ידוע'))];
+            // if parsed has no headers or looks wrong, try windows-1255
+            const hasValid = results && results.data && results.data.length > 0 && Object.keys(results.data[0]).length > 0;
+            if (!hasValid) {
+                // fallback to windows-1255 encoding
+                console.warn('CSV parse looks invalid with UTF-8; trying windows-1255 fallback');
+                text = await readFileText(file, 'windows-1255');
+                results = Papa.parse(text, { header: true, skipEmptyLines: true });
+            }
 
-            setTimeout(() => {
-                milestonesLoading.classList.remove('active');
-                if (typeof milestonesBuildDashboard === 'function') {
-                    milestonesBuildDashboard(classes);
-                } else {
-                    const sec = document.createElement('div');
-                    sec.className = 'section';
-                    sec.appendChild(createSectionTitle(`אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`));
-                    milestonesDashboard.appendChild(sec);
+            console.log('CSV parse preview:', results.data.slice(0,5));
+            console.log('CSV headers:', results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {}));
+            showDebug(`<h3>Debug: CSV headers & preview</h3><pre>${JSON.stringify({
+                headers: results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {}),
+                preview: results.data.slice(0,5)
+            }, null, 2)}</pre>`);
+
+            milestonesAnalyzeData(results.data);
+        } else {
+            // Excel path
+            const reader = new FileReader();
+            reader.onload = (e) => {
+                try {
+                    const data = new Uint8Array(e.target.result);
+                    const workbook = XLSX.read(data, { type: 'array' });
+                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+                    console.log('Excel first rows:', jsonData.slice(0,5));
+                    // show preview
+                    let dbgHtml = `<h3>Debug: Excel preview</h3><pre>${JSON.stringify(jsonData.slice(0,5), null, 2)}</pre>`;
+                    let dbg = document.getElementById('milestonesDebug');
+                    if (!dbg) {
+                        dbg = document.createElement('div');
+                        dbg.id = 'milestonesDebug';
+                        dbg.className = 'section';
+                        milestonesDashboard.parentNode.insertBefore(dbg, milestonesDashboard.nextSibling);
+                    }
+                    dbg.innerHTML = dbgHtml;
+                    milestonesAnalyzeData(jsonData);
+                } catch (err) {
+                    console.error('Excel read error', err);
+                    alert('שגיאה בקריאת קובץ ה-Excel (ראה קונסול)');
+                    milestonesLoading.classList.remove('active');
+                    milestonesUploadCard.style.display = 'block';
                 }
-            }, 300);
-        }
-
-        function milestonesGetStats(data) {
-            if (!data || data.length === 0) {
-                return { total: 0, boys: 0, girls: 0, minAge: 0, maxAge: 0 };
-            }
-            const ages = data.map(r => Number(r['PatientAgeInCompleted'])).filter(n => !isNaN(n));
-            return {
-                total: data.length,
-                boys: data.filter(r => Number(r['gender']) === 1).length,
-                girls: data.filter(r => Number(r['gender']) === 2).length,
-                minAge: ages.length ? Math.min(...ages) : 0,
-                maxAge: ages.length ? Math.max(...ages) : 0
             };
+            reader.readAsArrayBuffer(file);
         }
+    } catch (err) {
+        console.error('Unexpected read error:', err);
+        alert('שגיאה בקריאת הקובץ. בדוק את הקונסול למידע נוסף.');
+        milestonesLoading.classList.remove('active');
+        milestonesUploadCard.style.display = 'block';
+    }
+}
 
-        function milestonesCalculatePercentages(data) {
-            const total = data.length;
-            const results = {};
-            const unusualColumns = ['UnusualSocial', 'UnusualFineMotor', 'UnusualLanguage', 'UnusualGrossMotor'];
+/* -- REPLACEMENT: smarter milestonesAnalyzeData with flexible header mapping -- */
+function milestonesAnalyzeData(data) {
+    // show immediate debug if nothing
+    console.log('milestonesAnalyzeData received rows:', data && data.length);
+    if (!data || data.length === 0) {
+        alert('לא נמצאו נתונים בקובץ (0 שורות). בדוק כותרות וקידוד.');
+        milestonesLoading.classList.remove('active');
+        milestonesUploadCard.style.display = 'block';
+        return;
+    }
 
-            if (total === 0) {
-                unusualColumns.forEach(col => {
-                    results[hebrewNames[col]] = { percentage: 0, count: 0, total: 0 };
-                });
-                return results;
+    const sampleHeaders = Object.keys(data[0]);
+    const detected = detectColumns(sampleHeaders);
+    console.log('Detected columns mapping:', detected);
+
+    // build function to get value by candidate field name
+    const getVal = (row, name) => {
+        if (!name) return undefined;
+        if (row[name] !== undefined) return row[name];
+        // try trimmed keys
+        const keys = Object.keys(row);
+        for (let k of keys) {
+            if (k.trim().toLowerCase() === name.toString().trim().toLowerCase()) return row[k];
+        }
+        return undefined;
+    };
+
+    // filter rows that have valid age (use detected.ageField or fallback by searching possible numeric columns)
+    const ageField = detected.ageField;
+    const rowsWithAge = data.filter(r => {
+        let v = getVal(r, ageField);
+        if (v === undefined) {
+            // try common numeric columns heuristics
+            for (let k of Object.keys(r)) {
+                const key = k.toLowerCase();
+                if (key.includes('age') || key.includes('gיל') || key.includes('month')) {
+                    v = r[k]; break;
+                }
             }
-
-            unusualColumns.forEach(col => {
-                let zeroCount = 0;
-                data.forEach(row => {
-                    if (Number(row[col]) === 0) zeroCount++;
-                });
-                results[hebrewNames[col]] = {
-                    percentage: (zeroCount / total) * 100,
-                    count: zeroCount,
-                    total: total
-                };
-            });
-            return results;
         }
+        const n = toNumber(v);
+        return !isNaN(n);
+    });
 
-        // ... שאר הקוד הקיים ללא שינוי (charts, יצירת טבלאות, ייצוא וכו') ...
+    if (!rowsWithAge || rowsWithAge.length === 0) {
+        // show helpful debug and don't just fail silently
+        const dbg = document.getElementById('milestonesDebug');
+        const headers = sampleHeaders;
+        const preview = data.slice(0,5);
+        const html = `<h3>אין שורות עם גיל תקין</h3>
+            <p>כותרות שהתגלו:</p><pre>${JSON.stringify(headers, null, 2)}</pre>
+            <p>5 שורות ראשונות:</p><pre>${JSON.stringify(preview, null, 2)}</pre>
+            <p>נסה לוודא שיש עמודת גיל מספרית (לדוגמה: "PatientAgeInCompleted" או "גיל").</p>
+            <p>אם תרצה, שלח לי את ה-preivew כאן ואעדכן את המיפוי.</p>`;
+        if (dbg) dbg.innerHTML = html; else {
+            const newDbg = document.createElement('div');
+            newDbg.id = 'milestonesDebug';
+            newDbg.className = 'section';
+            newDbg.innerHTML = html;
+            milestonesDashboard.parentNode.insertBefore(newDbg, milestonesDashboard.nextSibling);
+        }
+        console.warn('No valid age rows found. Headers:', sampleHeaders, 'Preview:', data.slice(0,5));
+        alert('לא נמצאו שורות עם גיל תקין. בדוק את כותרות הקובץ. ראו Debug בתחתית הדף.');
+        milestonesLoading.classList.remove('active');
+        milestonesUploadCard.style.display = 'block';
+        return;
+    }
 
+    // continue with original flow but using rowsWithAge
+    milestonesAllData = rowsWithAge;
+    milestonesOrgName = (rowsWithAge[0][detected.orgField] || rowsWithAge[0]['org_name'] || rowsWithAge[0]['מעון'] || 'מעון') || 'מעון';
+    const classes = [...new Set(rowsWithAge.map(row => (row[detected.clinicField] || row['clinic_name'] || row['class'] || 'לא ידוע')))];
+    console.log('Using', rowsWithAge.length, 'rows after age filter. Org:', milestonesOrgName, 'Classes:', classes);
+
+    setTimeout(() => {
+        milestonesLoading.classList.remove('active');
+        if (typeof milestonesBuildDashboard === 'function') {
+            milestonesBuildDashboard(classes);
+        } else {
+            const sec = document.createElement('div');
+            sec.className = 'section';
+            sec.appendChild(createSectionTitle(`אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`));
+            milestonesDashboard.appendChild(sec);
+        }
+    }, 300);
+}
     </script>
 
     <!-- Footer קבוע בתחתית הדף: טקסט ולאחריו תמונה ממורכזת מתחת -->
