@@ -23,31 +23,12 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
             min-height: 100vh;
             direction: rtl;
-            padding-bottom: 110px; /* space for fixed footer */
         }
 
         .container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 40px 20px;
-        }
-
-        /* heading-with-logos */
-        .heading-with-logos {
-            display: inline-flex;
-            align-items: center;
-            gap: 12px;
-            justify-content: center;
-        }
-        .heading-with-logos .logo-left,
-        .heading-with-logos .logo-right {
-            height: 40px;
-            width: auto;
-            object-fit: contain;
-            border-radius: 6px;
-        }
-        .heading-with-logos .title-text {
-            display: inline-block;
         }
 
         /* ============ MAIN MENU ============ */
@@ -60,11 +41,19 @@
             animation: fadeIn 0.8s ease-out;
         }
 
-        .main-menu.hidden { display: none; }
+        .main-menu.hidden {
+            display: none;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
 
-        .menu-header { text-align: center; margin-bottom: 50px; }
+        .menu-header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
 
         .menu-header h1 {
             font-size: 3rem;
@@ -74,15 +63,19 @@
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 15px;
-            display: inline-flex;
-            align-items: center;
-            gap: 16px;
-            justify-content: center;
         }
 
-        .menu-header p { font-size: 1.2rem; color: #6b7280; }
+        .menu-header p {
+            font-size: 1.2rem;
+            color: #6b7280;
+        }
 
-        .menu-cards { display: flex; gap: 30px; flex-wrap: wrap; justify-content: center; }
+        .menu-cards {
+            display: flex;
+            gap: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
 
         .menu-card {
             background: white;
@@ -90,140 +83,617 @@
             padding: 40px;
             width: 320px;
             text-align: center;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.4s ease;
             border: 3px solid transparent;
         }
 
-        .menu-card:hover { transform: translateY(-10px); box-shadow: 0 20px 60px rgba(0,0,0,0.15); }
-        .menu-card.milestones:hover { border-color: #667eea; }
-        .menu-card.subjective:hover { border-color: #10b981; }
+        .menu-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+        }
 
-        .menu-card-icon { width: 100px; height: 100px; margin: 0 auto 25px; border-radius: 50%; display:flex; align-items:center; justify-content:center; font-size:3rem; }
+        .menu-card.milestones:hover {
+            border-color: #667eea;
+        }
 
-        .menu-card.milestones .menu-card-icon { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
-        .menu-card.subjective .menu-card-icon { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .menu-card.subjective:hover {
+            border-color: #10b981;
+        }
 
-        .menu-card h2 { font-size: 1.5rem; font-weight: 700; color: #1f2937; margin-bottom: 15px; }
-        .menu-card p { font-size: 0.95rem; color: #6b7280; line-height: 1.6; }
+        .menu-card-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+        }
+
+        .menu-card.milestones .menu-card-icon {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        .menu-card.subjective .menu-card-icon {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        }
+
+        .menu-card h2 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .menu-card p {
+            font-size: 0.95rem;
+            color: #6b7280;
+            line-height: 1.6;
+        }
 
         /* ============ SHARED STYLES ============ */
-        .app-container { display: none; }
-        .app-container.active { display: block; animation: fadeIn 0.6s ease-out; }
+        .app-container {
+            display: none;
+        }
+
+        .app-container.active {
+            display: block;
+            animation: fadeIn 0.6s ease-out;
+        }
 
         .back-button {
-            display: inline-flex; align-items: center; gap: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             padding: 12px 24px;
             background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%);
-            color: white; border: none; border-radius: 12px; font-size: 1rem; font-weight: 600;
-            cursor: pointer; transition: all 0.3s ease; font-family: 'Heebo', sans-serif;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Heebo', sans-serif;
             margin-bottom: 30px;
         }
-        .back-button:hover { transform: translateY(-2px); box-shadow: 0 10px 25px rgba(107,114,128,0.3); }
 
-        .header { text-align: center; margin-bottom: 50px; animation: fadeInDown 0.8s ease-out; }
-        @keyframes fadeInDown { from { opacity:0; transform: translateY(-30px);} to { opacity:1; transform: translateY(0);} }
+        .back-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
 
         .header h1 {
-            font-size: 2.5rem; font-weight: 800;
+            font-size: 2.5rem;
+            font-weight: 800;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
             margin-bottom: 10px;
-            display: inline-flex;
-            align-items: center;
-            gap: 16px;
-            justify-content: center;
         }
 
-        .header p { font-size: 1.1rem; color: #6b7280; }
+        .header p {
+            font-size: 1.1rem;
+            color: #6b7280;
+        }
 
         /* Upload Card */
-        .upload-card { background: white; border-radius: 24px; padding: 50px; box-shadow: 0 10px 40px rgba(0,0,0,0.08); margin-bottom:40px; text-align:center; }
-        .upload-area { border: 3px dashed #d1d5db; border-radius:20px; padding:60px 40px; cursor:pointer; transition:all 0.3s ease; background: linear-gradient(135deg,#fafbfc 0%,#f3f4f6 100%); }
-        .upload-area:hover { border-color:#667eea; background: linear-gradient(135deg,#f0f1ff 0%,#e8e9ff 100%); transform: scale(1.01); }
-        .upload-icon { width:80px; height:80px; margin:0 auto 20px; background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:2.5rem; animation: pulse 2s infinite; }
-        @keyframes pulse { 0%,100%{ box-shadow:0 0 0 0 rgba(102,126,234,0.4);} 50%{ box-shadow:0 0 0 20px rgba(102,126,234,0); } }
-        .upload-text { font-size:1.3rem; font-weight:600; color:#374151; margin-bottom:8px; }
-        .upload-subtext { font-size:0.95rem; color:#9ca3af; }
-        .file-input { display:none; }
-
-        /* Loading */
-        .loading { display:none; text-align:center; padding:40px; }
-        .loading.active { display:block; }
-        .spinner { width:50px; height:50px; border:4px solid #e5e7eb; border-top-color: #667eea; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 20px; }
-        @keyframes spin { to { transform: rotate(360deg); } }
-
-        /* Dashboard / Section / tables / charts - keep as before */
-        .section { background:white; border-radius:24px; padding:40px; box-shadow:0 10px 40px rgba(0,0,0,0.08); margin-bottom:30px; }
-        .section-title {
-            font-size:1.6rem; font-weight:700; color:#1f2937; margin-bottom:25px; text-align:center;
-            padding-bottom:15px; border-bottom:3px solid #667eea;
-            display:inline-flex; align-items:center; gap:10px; justify-content:center;
+        .upload-card {
+            background: white;
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 40px;
+            text-align: center;
         }
 
-        .stats-row { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-bottom:30px; }
-        .stat-badge { display:inline-flex; align-items:center; gap:8px; background: linear-gradient(135deg,#f3f4f6 0%,#e5e7eb 100%); padding:12px 20px; border-radius:50px; font-weight:600; font-size:0.95rem; color:#374151; }
-        .stat-badge.boys { background: linear-gradient(135deg,#dbeafe 0%,#bfdbfe 100%); color:#1e40af; }
-        .stat-badge.girls { background: linear-gradient(135deg,#fce7f3 0%,#fbcfe8 100%); color:#be185d; }
-        .stat-badge.age { background: linear-gradient(135deg,#d1fae5 0%,#a7f3d0 100%); color:#065f46; }
-        .stat-badge.total { background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; }
+        .upload-area {
+            border: 3px dashed #d1d5db;
+            border-radius: 20px;
+            padding: 60px 40px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #fafbfc 0%, #f3f4f6 100%);
+        }
 
-        .chart-container { position:relative; height:350px; margin-bottom:20px; }
-        .data-table { width:100%; border-collapse:collapse; margin-top:20px; }
-        .data-table th { background: linear-gradient(135deg,#667eea 0%,#764ba2 100%); color:white; padding:14px 18px; text-align:right; font-weight:600; }
-        .data-table th:first-child { border-radius: 0 12px 0 0; }
-        .data-table th:last-child { border-radius: 12px 0 0 0; }
-        .data-table td { padding:14px 18px; border-bottom:1px solid #e5e7eb; color:#374151; }
-        .data-table tr:hover td { background:#f9fafb; }
+        .upload-area:hover {
+            border-color: #667eea;
+            background: linear-gradient(135deg, #f0f1ff 0%, #e8e9ff 100%);
+            transform: scale(1.01);
+        }
 
-        .percentage-bar { display:flex; align-items:center; gap:12px; }
-        .bar-container { flex:1; height:12px; background:#e5e7eb; border-radius:6px; overflow:hidden; }
-        .bar-fill { height:100%; border-radius:6px; transition: width 1s ease-out; }
-        .color-social { background: linear-gradient(90deg,#c4b5fd 0%,#a78bfa 100%); }
-        .color-language { background: linear-gradient(90deg,#fdba74 0%,#fb923c 100%); }
-        .color-gross { background: linear-gradient(90deg,#7dd3fc 0%,#38bdf8 100%); }
-        .color-fine { background: linear-gradient(90deg,#86efac 0%,#4ade80 100%); }
-
-        /* Buttons */
-        .buttons-row { display:flex; gap:15px; justify-content:center; flex-wrap:wrap; margin-top:20px; }
-        .btn { display:inline-flex; align-items:center; gap:8px; padding:12px 24px; border-radius:12px; font-size:0.95rem; font-weight:600; cursor:pointer; transition:all 0.3s ease; border:none; font-family: 'Heebo', sans-serif; }
-        .btn:hover { transform: translateY(-2px); }
-        .btn-save { background: linear-gradient(135deg,#10b981 0%,#059669 100%); color:white; }
-        .btn-pdf { background: linear-gradient(135deg,#ef4444 0%,#dc2626 100%); color:white; }
-        .btn-reset { background: linear-gradient(135deg,#6b7280 0%,#4b5563 100%); color:white; }
-        .btn-excel { background: linear-gradient(135deg,#17a2b8 0%,#138496 100%); color:white; }
-
-        /* Footer (fixed) - stacked: text then centered image */
-        .footer {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
+        .upload-icon {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
             align-items: center;
             justify-content: center;
-            gap: 6px;
-            background: rgba(255,255,255,0.98);
-            padding: 10px 20px;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
-            z-index: 9999;
+            animation: pulse 2s infinite;
+            font-size: 2.5rem;
         }
 
-        .footer p { margin: 0; font-size: 0.95rem; color: #9ca3af; text-align:center; }
-        .footer .logo { height: 56px; object-fit: contain; display:block; }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 20px rgba(102, 126, 234, 0); }
+        }
 
-        /* Subjective-specific and responsive tweaks */
-        .charts-grid { display:grid; grid-template-columns: repeat(3,1fr); gap:20px; margin-bottom:25px; }
-        .chart-card { background:#fafafa; border-radius:10px; padding:20px; border:1px solid #eee; }
-        .chart-title { font-size:1.1em; color:#34495e; margin-bottom:15px; text-align:center; font-weight:600; }
-        .chart-wrapper { display:flex; justify-content:center; margin-bottom:15px; }
-        canvas.pie-chart { max-width:180px; max-height:180px; }
+        .upload-text {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #374151;
+            margin-bottom: 8px;
+        }
 
-        @media (max-width: 992px) { .charts-grid { grid-template-columns: repeat(2,1fr); } }
+        .upload-subtext {
+            font-size: 0.95rem;
+            color: #9ca3af;
+        }
+
+        .file-input { display: none; }
+
+        /* Loading */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .loading.active { display: block; }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #e5e7eb;
+            border-top-color: #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Dashboard */
+        .dashboard {
+            display: none;
+            animation: fadeIn 0.6s ease-out;
+        }
+
+        .dashboard.active { display: block; }
+
+        /* Section */
+        .section {
+            background: white;
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 25px;
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #667eea;
+        }
+
+        .class-section {
+            border-right: 4px solid #667eea;
+            padding-right: 20px;
+        }
+
+        /* Stats Row */
+        .stats-row {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .stat-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+            padding: 12px 20px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: #374151;
+        }
+
+        .stat-badge.boys { background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%); color: #1e40af; }
+        .stat-badge.girls { background: linear-gradient(135deg, #fce7f3 0%, #fbcfe8 100%); color: #be185d; }
+        .stat-badge.age { background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%); color: #065f46; }
+        .stat-badge.total { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; }
+
+        /* Chart */
+        .chart-container {
+            position: relative;
+            height: 350px;
+            margin-bottom: 20px;
+        }
+
+        /* Table */
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .data-table th {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 18px;
+            text-align: right;
+            font-weight: 600;
+        }
+
+        .data-table th:first-child { border-radius: 0 12px 0 0; }
+        .data-table th:last-child { border-radius: 12px 0 0 0; }
+
+        .data-table td {
+            padding: 14px 18px;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+        }
+
+        .data-table tr:hover td { background: #f9fafb; }
+
+        .percentage-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .bar-container {
+            flex: 1;
+            height: 12px;
+            background: #e5e7eb;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 6px;
+            transition: width 1s ease-out;
+        }
+
+        .color-social { background: linear-gradient(90deg, #c4b5fd 0%, #a78bfa 100%); }
+        .color-language { background: linear-gradient(90deg, #fdba74 0%, #fb923c 100%); }
+        .color-gross { background: linear-gradient(90deg, #7dd3fc 0%, #38bdf8 100%); }
+        .color-fine { background: linear-gradient(90deg, #86efac 0%, #4ade80 100%); }
+
+        /* Buttons */
+        .buttons-row {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .btn:hover { transform: translateY(-2px); }
+
+        .btn-save { background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; }
+        .btn-save:hover { box-shadow: 0 10px 25px rgba(16, 185, 129, 0.3); }
+
+        .btn-pdf { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; }
+        .btn-pdf:hover { box-shadow: 0 10px 25px rgba(239, 68, 68, 0.3); }
+
+        .btn-reset { background: linear-gradient(135deg, #6b7280 0%, #4b5563 100%); color: white; }
+        .btn-reset:hover { box-shadow: 0 10px 25px rgba(107, 114, 128, 0.3); }
+
+        .btn-excel { background: linear-gradient(135deg, #17a2b8 0%, #138496 100%); color: white; }
+        .btn-excel:hover { box-shadow: 0 10px 25px rgba(23, 162, 184, 0.3); }
+
+        .footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        /* ============ SUBJECTIVE SPECIFIC STYLES ============ */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .chart-card {
+            background: #fafafa;
+            border-radius: 10px;
+            padding: 20px;
+            border: 1px solid #eee;
+        }
+
+        .chart-title {
+            font-size: 1.1em;
+            color: #34495e;
+            margin-bottom: 15px;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .chart-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 15px;
+        }
+
+        canvas.pie-chart {
+            max-width: 180px;
+            max-height: 180px;
+        }
+
+        .color-indicator {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            margin-left: 6px;
+            vertical-align: middle;
+        }
+
+        .regression-section {
+            background: #fff8e1;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            border: 1px solid #ffe082;
+        }
+
+        .regression-title {
+            font-size: 1.1em;
+            color: #f57c00;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .regression-content {
+            display: flex;
+            align-items: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .regression-stat {
+            text-align: center;
+        }
+
+        .regression-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #e65100;
+        }
+
+        .regression-label {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .global-legend {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            display: none;
+        }
+
+        .global-legend h3 {
+            margin-bottom: 15px;
+            color: #2c3e50;
+            font-size: 1.1em;
+        }
+
+        .global-legend-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .global-legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9em;
+        }
+
+        .legend-color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+
+        .group-section {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            position: relative;
+        }
+
+        .group-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #10b981;
+        }
+
+        .group-title {
+            font-size: 1.5em;
+            color: #2c3e50;
+        }
+
+        .group-stats {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .stat-box {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: #10b981;
+        }
+
+        .stat-label {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        .group-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .group-export-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            color: white;
+            font-family: 'Heebo', sans-serif;
+        }
+
+        .group-export-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 40px;
+            color: #888;
+            font-size: 1.1em;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 35px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 450px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        .modal-content h3 {
+            margin-bottom: 25px;
+            color: #2c3e50;
+            font-size: 1.3em;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 25px;
+            background: #e0e0e0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            width: 0%;
+            transition: width 0.3s;
+            border-radius: 12px;
+        }
+
+        .progress-text {
+            color: #666;
+            font-size: 0.95em;
+        }
+
+        .progress-detail {
+            color: #999;
+            font-size: 0.85em;
+            margin-top: 8px;
+        }
+
+        @media (max-width: 992px) {
+            .charts-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
         @media (max-width: 768px) {
             .menu-header h1 { font-size: 2rem; }
             .menu-cards { flex-direction: column; align-items: center; }
@@ -233,9 +703,6 @@
             .chart-container { height: 280px; }
             .charts-grid { grid-template-columns: 1fr; }
             .group-header { flex-direction: column; align-items: flex-start; }
-            .heading-with-logos .logo-left,
-            .heading-with-logos .logo-right { height: 28px; }
-            body { padding-bottom: 130px; }
         }
     </style>
 </head>
@@ -243,23 +710,17 @@
     <!-- ============ MAIN MENU ============ -->
     <div class="main-menu" id="mainMenu">
         <div class="menu-header">
-            <h1>
-                <span class="heading-with-logos">
-                    <img class="logo-left" src="sderot.jpg" alt="Sderot logo">
-                    <span class="title-text"> מערכת ניתוח התפתחותי</span>
-                    <img class="logo-right" src="drech_hakesher.jpg" alt="Drech Hakesher logo">
-                </span>
-            </h1>
+            <h1>🎯 מערכת ניתוח התפתחותי</h1>
             <p>בחר את סוג הניתוח שברצונך לבצע</p>
         </div>
-
+        
         <div class="menu-cards">
             <div class="menu-card milestones" onclick="showApp('milestones')">
                 <div class="menu-card-icon">📊</div>
                 <h2>ניתוח אבני דרך התפתחותיות</h2>
                 <p>ניתוח עמידה באבני דרך התפתחותיות בתחומים: חברה, שפה, מוטוריקה גסה ומוטוריקה עדינה</p>
             </div>
-
+            
             <div class="menu-card subjective" onclick="showApp('subjective')">
                 <div class="menu-card-icon">📋</div>
                 <h2>ניתוח שאלון סובייקטיבי</h2>
@@ -271,16 +732,12 @@
     <!-- ============ MILESTONES APP ============ -->
     <div class="app-container" id="milestonesApp">
         <div class="container">
-            <button class="back-button" onclick="goToMenu()">→ חזרה לתפריט הראשי</button>
-
+            <button class="back-button" onclick="goToMenu()">
+                → חזרה לתפריט הראשי
+            </button>
+            
             <header class="header">
-                <h1>
-                    <span class="heading-with-logos">
-                        <img class="logo-left" src="sderot.jpg" alt="Sderot logo">
-                        <span class="title-text">📊 ניתוח אבני דרך התפתחותיות</span>
-                        <img class="logo-right" src="drech_hakesher.jpg" alt="Drech Hakesher logo">
-                    </span>
-                </h1>
+                <h1>📊 ניתוח אבני דרך התפתחותיות</h1>
                 <p>העלה קובץ CSV או Excel לניתוח מעון וכיתות</p>
             </header>
 
@@ -305,16 +762,12 @@
     <!-- ============ SUBJECTIVE APP ============ -->
     <div class="app-container" id="subjectiveApp">
         <div class="container">
-            <button class="back-button" onclick="goToMenu()">→ חזרה לתפריט הראשי</button>
-
+            <button class="back-button" onclick="goToMenu()">
+                → חזרה לתפריט הראשי
+            </button>
+            
             <header class="header">
-                <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">
-                    <span class="heading-with-logos">
-                        <img class="logo-left" src="sderot.jpg" alt="Sderot logo">
-                        <span class="title-text">📋 ניתוח שאלון סובייקטיבי</span>
-                        <img class="logo-right" src="drech_hakesher.jpg" alt="Drech Hakesher logo">
-                    </span>
-                </h1>
+                <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">📋 ניתוח שאלון סובייקטיבי</h1>
                 <p>העלה קובץ CSV או Excel לניתוח נתוני התנהגות לפי כיתות</p>
             </header>
 
@@ -373,45 +826,10 @@
     <script>
         const { jsPDF } = window.jspdf || {};
 
-        // Helper to create section titles with one logo on each side (optional reuse)
-        function createSectionTitle(titleText, includeLogos = true) {
-            const titleEl = document.createElement('div');
-            titleEl.className = 'section-title';
-
-            const wrapper = document.createElement('span');
-            wrapper.className = 'heading-with-logos';
-
-            if (includeLogos) {
-                const left = document.createElement('img');
-                left.className = 'logo-left';
-                left.src = 'sderot.jpg';
-                left.alt = 'Sderot logo';
-
-                const right = document.createElement('img');
-                right.className = 'logo-right';
-                right.src = 'drech_hakesher.jpg';
-                right.alt = 'Drech Hakesher logo';
-
-                wrapper.appendChild(left);
-                const txt = document.createElement('span');
-                txt.className = 'title-text';
-                txt.textContent = titleText;
-                wrapper.appendChild(txt);
-                wrapper.appendChild(right);
-            } else {
-                const txt = document.createElement('span');
-                txt.className = 'title-text';
-                txt.textContent = titleText;
-                wrapper.appendChild(txt);
-            }
-
-            titleEl.appendChild(wrapper);
-            return titleEl;
-        }
-
         // ============ NAVIGATION ============
         function showApp(appType) {
             document.getElementById('mainMenu').classList.add('hidden');
+            
             if (appType === 'milestones') {
                 document.getElementById('milestonesApp').classList.add('active');
             } else if (appType === 'subjective') {
@@ -423,12 +841,12 @@
             document.getElementById('mainMenu').classList.remove('hidden');
             document.getElementById('milestonesApp').classList.remove('active');
             document.getElementById('subjectiveApp').classList.remove('active');
-
+            
             // Reset milestones
-            if (typeof milestonesReset === 'function') milestonesReset();
-
+            milestonesReset();
+            
             // Reset subjective
-            if (typeof subjectiveReset === 'function') subjectiveReset();
+            subjectiveReset();
         }
 
         // ============ MILESTONES APP ============
@@ -481,7 +899,7 @@
             milestonesLoading.classList.add('active');
 
             const reader = new FileReader();
-
+            
             if (file.name.endsWith('.csv')) {
                 reader.onload = (e) => {
                     Papa.parse(e.target.result, {
@@ -509,249 +927,886 @@
             }
         }
 
-        function readFileText(file, encoding = 'UTF-8') {
-    return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => resolve(e.target.result);
-        reader.onerror = (e) => reject(e);
-        try {
-            reader.readAsText(file, encoding);
-        } catch (err) {
-            reject(err);
-        }
-    });
-}
+        function milestonesAnalyzeData(data) {
+            milestonesAllData = data.filter(row => 
+                row['PatientAgeInCompleted'] !== undefined && 
+                row['PatientAgeInCompleted'] !== '' &&
+                !isNaN(Number(row['PatientAgeInCompleted']))
+            );
 
-/* -- detect columns by heuristics from headers array -- */
-function detectColumns(headers) {
-    const lower = headers.map(h => (h||'').toString().trim().toLowerCase());
-
-    const pick = (candidates) => {
-        for (let cand of candidates) {
-            const s = cand.toLowerCase();
-            for (let i = 0; i < lower.length; i++) {
-                if (lower[i].includes(s)) return headers[i];
-            }
-        }
-        return null;
-    };
-
-    const ageField = pick(['patientageincompleted','patient_age_in_completed','age','age_in_months','גיל','גיל_בחודשים','age_months']);
-    const orgField = pick(['org_name','org','organization','מעון','שם_המעון','orgname']);
-    const clinicField = pick(['clinic_name','clinic','class','כיתה','clinicname']);
-    const genderField = pick(['gender','sex','מגדר','gender_id']);
-
-    // detect unusual columns by keyword matches
-    const mapUnusual = {};
-    headers.forEach(h => {
-        const key = (h||'').toString().toLowerCase();
-        if (key.includes('social') || key.includes('חברה') || key.includes('social')) mapUnusual['UnusualSocial'] = h;
-        if (key.includes('language') || key.includes('שפה')) mapUnusual['UnusualLanguage'] = h;
-        if (key.includes('fine') || key.includes('עדינה') || key.includes('fine motor') || key.includes('motòr')) mapUnusual['UnusualFineMotor'] = h;
-        if (key.includes('gross') || key.includes('גסה') || key.includes('gross motor')) mapUnusual['UnusualGrossMotor'] = h;
-    });
-
-    return { ageField, orgField, clinicField, genderField, mapUnusual };
-}
-
-/* -- safe numeric parse -- */
-function toNumber(v) {
-    if (v === undefined || v === null) return NaN;
-    let s = v.toString().trim();
-    // remove thousands separators, swap comma decimal if needed
-    // if contains both comma and dot assume dot decimal and remove commas
-    if (s.indexOf(',') !== -1 && s.indexOf('.') === -1) s = s.replace(',', '.');
-    s = s.replace(/\s+/g, '');
-    s = s.replace(/,/g, ''); // remove leftover commas
-    // remove non-digit except dot and minus
-    s = s.replace(/[^0-9.\-]/g, '');
-    const n = Number(s);
-    return isNaN(n) ? NaN : n;
-}
-
-/* -- REPLACEMENT: milestonesProcessFile with encoding & delimiter fallback and debug output -- */
-async function milestonesProcessFile(file) {
-    milestonesUploadCard.style.display = 'none';
-    milestonesLoading.classList.add('active');
-
-    // helper to show debug area
-    function showDebug(html) {
-        let dbg = document.getElementById('milestonesDebug');
-        if (!dbg) {
-            dbg = document.createElement('div');
-            dbg.id = 'milestonesDebug';
-            dbg.className = 'section';
-            dbg.style.background = '#fffefc';
-            dbg.style.border = '1px dashed #ffd';
-            dbg.style.marginTop = '10px';
-            milestonesDashboard.parentNode.insertBefore(dbg, milestonesDashboard.nextSibling);
-        }
-        dbg.innerHTML = html;
-    }
-
-    try {
-        if (file.name.toLowerCase().endsWith('.csv')) {
-            // try utf-8 first
-            let text = await readFileText(file, 'UTF-8');
-
-            // quick parse to detect headers
-            let results = Papa.parse(text, { header: true, skipEmptyLines: true, preview: 5 });
-            // if it seems like single column with semicolons, try semicolon delimiter
-            const headerKeys = results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {});
-            const singleHeader = headerKeys.length === 1 && headerKeys[0] && headerKeys[0].includes(';');
-
-            if (singleHeader) {
-                // reparse with delimiter ;
-                results = Papa.parse(text, { header: true, skipEmptyLines: true, delimiter: ';' });
+            if (!milestonesAllData || milestonesAllData.length === 0) {
+                alert('לא נמצאו נתונים תקינים');
+                milestonesLoading.classList.remove('active');
+                milestonesUploadCard.style.display = 'block';
+                return;
             }
 
-            // if parsed has no headers or looks wrong, try windows-1255
-            const hasValid = results && results.data && results.data.length > 0 && Object.keys(results.data[0]).length > 0;
-            if (!hasValid) {
-                // fallback to windows-1255 encoding
-                console.warn('CSV parse looks invalid with UTF-8; trying windows-1255 fallback');
-                text = await readFileText(file, 'windows-1255');
-                results = Papa.parse(text, { header: true, skipEmptyLines: true });
+            milestonesOrgName = milestonesAllData[0]['org_name'] || 'מעון';
+            const classes = [...new Set(milestonesAllData.map(row => row['clinic_name'] || 'לא ידוע'))];
+
+            setTimeout(() => {
+                milestonesLoading.classList.remove('active');
+                milestonesBuildDashboard(classes);
+            }, 300);
+        }
+
+        function milestonesGetStats(data) {
+            if (!data || data.length === 0) {
+                return { total: 0, boys: 0, girls: 0, minAge: 0, maxAge: 0 };
             }
-
-            console.log('CSV parse preview:', results.data.slice(0,5));
-            console.log('CSV headers:', results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {}));
-            showDebug(`<h3>Debug: CSV headers & preview</h3><pre>${JSON.stringify({
-                headers: results.meta && results.meta.fields ? results.meta.fields : Object.keys(results.data[0] || {}),
-                preview: results.data.slice(0,5)
-            }, null, 2)}</pre>`);
-
-            milestonesAnalyzeData(results.data);
-        } else {
-            // Excel path
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                try {
-                    const data = new Uint8Array(e.target.result);
-                    const workbook = XLSX.read(data, { type: 'array' });
-                    const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-                    const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
-                    console.log('Excel first rows:', jsonData.slice(0,5));
-                    // show preview
-                    let dbgHtml = `<h3>Debug: Excel preview</h3><pre>${JSON.stringify(jsonData.slice(0,5), null, 2)}</pre>`;
-                    let dbg = document.getElementById('milestonesDebug');
-                    if (!dbg) {
-                        dbg = document.createElement('div');
-                        dbg.id = 'milestonesDebug';
-                        dbg.className = 'section';
-                        milestonesDashboard.parentNode.insertBefore(dbg, milestonesDashboard.nextSibling);
-                    }
-                    dbg.innerHTML = dbgHtml;
-                    milestonesAnalyzeData(jsonData);
-                } catch (err) {
-                    console.error('Excel read error', err);
-                    alert('שגיאה בקריאת קובץ ה-Excel (ראה קונסול)');
-                    milestonesLoading.classList.remove('active');
-                    milestonesUploadCard.style.display = 'block';
-                }
+            const ages = data.map(r => Number(r['PatientAgeInCompleted'])).filter(n => !isNaN(n));
+            return {
+                total: data.length,
+                boys: data.filter(r => Number(r['gender']) === 1).length,
+                girls: data.filter(r => Number(r['gender']) === 2).length,
+                minAge: ages.length ? Math.min(...ages) : 0,
+                maxAge: ages.length ? Math.max(...ages) : 0
             };
-            reader.readAsArrayBuffer(file);
         }
-    } catch (err) {
-        console.error('Unexpected read error:', err);
-        alert('שגיאה בקריאת הקובץ. בדוק את הקונסול למידע נוסף.');
-        milestonesLoading.classList.remove('active');
-        milestonesUploadCard.style.display = 'block';
-    }
-}
 
-/* -- REPLACEMENT: smarter milestonesAnalyzeData with flexible header mapping -- */
-function milestonesAnalyzeData(data) {
-    // show immediate debug if nothing
-    console.log('milestonesAnalyzeData received rows:', data && data.length);
-    if (!data || data.length === 0) {
-        alert('לא נמצאו נתונים בקובץ (0 שורות). בדוק כותרות וקידוד.');
-        milestonesLoading.classList.remove('active');
-        milestonesUploadCard.style.display = 'block';
-        return;
-    }
+        function milestonesCalculatePercentages(data) {
+            const total = data.length;
+            const results = {};
+            const unusualColumns = ['UnusualSocial', 'UnusualFineMotor', 'UnusualLanguage', 'UnusualGrossMotor'];
 
-    const sampleHeaders = Object.keys(data[0]);
-    const detected = detectColumns(sampleHeaders);
-    console.log('Detected columns mapping:', detected);
+            if (total === 0) {
+                unusualColumns.forEach(col => {
+                    results[hebrewNames[col]] = { percentage: 0, count: 0, total: 0 };
+                });
+                return results;
+            }
 
-    // build function to get value by candidate field name
-    const getVal = (row, name) => {
-        if (!name) return undefined;
-        if (row[name] !== undefined) return row[name];
-        // try trimmed keys
-        const keys = Object.keys(row);
-        for (let k of keys) {
-            if (k.trim().toLowerCase() === name.toString().trim().toLowerCase()) return row[k];
+            unusualColumns.forEach(col => {
+                let zeroCount = 0;
+                data.forEach(row => {
+                    if (Number(row[col]) === 0) zeroCount++;
+                });
+                results[hebrewNames[col]] = {
+                    percentage: (zeroCount / total) * 100,
+                    count: zeroCount,
+                    total: total
+                };
+            });
+            return results;
         }
-        return undefined;
-    };
 
-    // filter rows that have valid age (use detected.ageField or fallback by searching possible numeric columns)
-    const ageField = detected.ageField;
-    const rowsWithAge = data.filter(r => {
-        let v = getVal(r, ageField);
-        if (v === undefined) {
-            // try common numeric columns heuristics
-            for (let k of Object.keys(r)) {
-                const key = k.toLowerCase();
-                if (key.includes('age') || key.includes('gיל') || key.includes('month')) {
-                    v = r[k]; break;
+        function milestonesBuildDashboard(classes) {
+            milestonesDashboard.innerHTML = '';
+            milestonesCharts = {};
+            milestonesSectionsData = {};
+
+            const generalSection = milestonesCreateSection('general', `אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`, milestonesAllData);
+            milestonesDashboard.appendChild(generalSection);
+
+            classes.forEach((className, index) => {
+                const classData = milestonesAllData.filter(r => (r['clinic_name'] || 'לא ידוע') === className);
+                const classSection = milestonesCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן עמדו ילדי כיתה "${className}"`, classData, true);
+                milestonesDashboard.appendChild(classSection);
+            });
+
+            const mainButtons = document.createElement('div');
+            mainButtons.className = 'section';
+            mainButtons.innerHTML = `
+                <div class="buttons-row">
+                    <button class="btn btn-pdf" onclick="milestonesSavePDF()">📄 שמור הכל כ-PDF</button>
+                    <button class="btn btn-reset" onclick="milestonesReset()">🔄 העלה קובץ חדש</button>
+                </div>
+            `;
+            milestonesDashboard.appendChild(mainButtons);
+
+            milestonesDashboard.classList.add('active');
+
+            setTimeout(() => {
+                Object.keys(milestonesSectionsData).forEach(key => {
+                    milestonesCreateChart(key, milestonesSectionsData[key]);
+                });
+            }, 100);
+        }
+
+        function milestonesCreateSection(id, title, data, isClass = false) {
+            const stats = milestonesGetStats(data);
+            const percentages = milestonesCalculatePercentages(data);
+            milestonesSectionsData[id] = { data, stats, percentages, title };
+
+            const section = document.createElement('div');
+            section.className = `section ${isClass ? 'class-section' : ''}`;
+            section.id = `section_${id}`;
+
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+
+            const rowsHtml = order.map(name => {
+                const p = percentages[name] || { percentage: 0, count: 0, total: stats.total || 0 };
+                const barClass = colorClasses[name] || '';
+                const percentStyle = `width: ${isFinite(p.percentage) ? p.percentage : 0}%`;
+                return `
+                    <tr>
+                        <td><strong>${name}</strong></td>
+                        <td>
+                            <div class="percentage-bar">
+                                <div class="bar-container">
+                                    <div class="bar-fill ${barClass}" style="${percentStyle}"></div>
+                                </div>
+                                <span>${(isFinite(p.percentage) ? p.percentage.toFixed(1) : '0.0')}%</span>
+                            </div>
+                        </td>
+                        <td>${p.count} / ${p.total}</td>
+                    </tr>
+                `;
+            }).join('');
+
+            section.innerHTML = `
+                <h2 class="section-title">${title}</h2>
+                
+                <div class="stats-row">
+                    <span class="stat-badge total">סה"כ: ${stats.total}</span>
+                    <span class="stat-badge boys">👦 בנים: ${stats.boys}</span>
+                    <span class="stat-badge girls">👧 בנות: ${stats.girls}</span>
+                    <span class="stat-badge age">📅 גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}</span>
+                </div>
+
+                <div class="chart-container">
+                    <canvas id="chart_${id}"></canvas>
+                </div>
+
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>קטגוריה</th>
+                            <th>אחוז עמידה</th>
+                            <th>כמות</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${rowsHtml}
+                    </tbody>
+                </table>
+
+                <div class="buttons-row">
+                    <button class="btn btn-save" onclick="milestonesSaveSection('${id}')">📷 שמור כתמונה</button>
+                </div>
+            `;
+
+            return section;
+        }
+
+        function milestonesCreateChart(id, sectionData) {
+            const canvasEl = document.getElementById(`chart_${id}`);
+            if (!canvasEl) return;
+            const ctx = canvasEl.getContext('2d');
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+            const percentages = sectionData.percentages;
+
+            const dataValues = order.map(name => {
+                const p = percentages[name];
+                return (p && isFinite(p.percentage)) ? p.percentage : 0;
+            });
+
+            const bg = order.map(name => milestonesColors[name] ? milestonesColors[name].bg : 'rgba(0,0,0,0.1)');
+            const border = order.map(name => milestonesColors[name] ? milestonesColors[name].border : '#ccc');
+
+            if (milestonesCharts[id]) {
+                try { milestonesCharts[id].destroy(); } catch (_) {}
+            }
+
+            milestonesCharts[id] = new Chart(ctx, {
+                type: 'bar',
+                plugins: [ChartDataLabels],
+                data: {
+                    labels: order,
+                    datasets: [{
+                        data: dataValues,
+                        backgroundColor: bg,
+                        borderColor: border,
+                        borderWidth: 3,
+                        borderRadius: 8,
+                        barThickness: 60
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        datalabels: {
+                            anchor: 'end',
+                            align: 'end',
+                            color: '#333',
+                            font: { size: 13, weight: 'bold', family: 'Heebo' },
+                            formatter: (value) => {
+                                if (!isFinite(value)) return '0.0%';
+                                return value.toFixed(1) + '%';
+                            }
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: { callback: (v) => v + '%', font: { size: 11, family: 'Heebo' } },
+                            grid: { color: 'rgba(0,0,0,0.05)' }
+                        },
+                        x: {
+                            ticks: { font: { size: 12, family: 'Heebo', weight: '600' } },
+                            grid: { display: false }
+                        }
+                    }
                 }
+            });
+        }
+
+        function milestonesSaveSection(id) {
+            const sectionData = milestonesSectionsData[id];
+            if (!sectionData) return;
+            const canvas = document.getElementById(`chart_${id}`);
+            if (!canvas) return;
+            
+            const tempCanvas = document.createElement('canvas');
+            const ctx = tempCanvas.getContext('2d');
+            
+            const width = 900;
+            const chartHeight = 350;
+            const tableHeight = 220;
+            const padding = 40;
+            
+            tempCanvas.width = width;
+            tempCanvas.height = chartHeight + tableHeight + padding * 3 + 40;
+            
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+            
+            ctx.fillStyle = '#1f2937';
+            ctx.font = 'bold 22px Heebo, Arial';
+            ctx.textAlign = 'center';
+            ctx.fillText(sectionData.title, width / 2, padding + 18);
+            
+            const stats = sectionData.stats;
+            ctx.font = '14px Heebo, Arial';
+            ctx.fillStyle = '#4b5563';
+            ctx.fillText(`סה"כ: ${stats.total}  |  בנים: ${stats.boys}  |  בנות: ${stats.girls}  |  גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}`, width / 2, padding + 45);
+            
+            try {
+                const chartImg = canvas.toDataURL('image/png');
+                const img = new Image();
+                img.onload = () => {
+                    ctx.drawImage(img, (width - 800) / 2, padding + 60, 800, chartHeight - 60);
+                    milestonesDrawTable(ctx, sectionData.percentages, padding, chartHeight + padding + 60, width - padding * 2);
+                    const link = document.createElement('a');
+                    const safeName = sectionData.title.replace(/[^א-תa-zA-Z0-9]/g, '_');
+                    link.download = `${safeName}.png`;
+                    link.href = tempCanvas.toDataURL('image/png', 1.0);
+                    link.click();
+                };
+                img.src = chartImg;
+            } catch (err) {
+                alert('שגיאה ביצוא התמונה');
             }
         }
-        const n = toNumber(v);
-        return !isNaN(n);
-    });
 
-    if (!rowsWithAge || rowsWithAge.length === 0) {
-        // show helpful debug and don't just fail silently
-        const dbg = document.getElementById('milestonesDebug');
-        const headers = sampleHeaders;
-        const preview = data.slice(0,5);
-        const html = `<h3>אין שורות עם גיל תקין</h3>
-            <p>כותרות שהתגלו:</p><pre>${JSON.stringify(headers, null, 2)}</pre>
-            <p>5 שורות ראשונות:</p><pre>${JSON.stringify(preview, null, 2)}</pre>
-            <p>נסה לוודא שיש עמודת גיל מספרית (לדוגמה: "PatientAgeInCompleted" או "גיל").</p>
-            <p>אם תרצה, שלח לי את ה-preivew כאן ואעדכן את המיפוי.</p>`;
-        if (dbg) dbg.innerHTML = html; else {
-            const newDbg = document.createElement('div');
-            newDbg.id = 'milestonesDebug';
-            newDbg.className = 'section';
-            newDbg.innerHTML = html;
-            milestonesDashboard.parentNode.insertBefore(newDbg, milestonesDashboard.nextSibling);
+        function milestonesDrawTable(ctx, percentages, x, y, width) {
+            const order = ['חברה', 'שפה', 'מוטוריקה גסה', 'מוטוריקה עדינה'];
+            const rowHeight = 40;
+            const headerHeight = 40;
+            
+            const barColors = {
+                'חברה': '#c4b5fd',
+                'שפה': '#fdba74',
+                'מוטוריקה גסה': '#7dd3fc',
+                'מוטוריקה עדינה': '#86efac'
+            };
+            
+            ctx.fillStyle = '#667eea';
+            ctx.fillRect(x, y, width, headerHeight);
+            
+            ctx.fillStyle = 'white';
+            ctx.font = 'bold 14px Heebo, Arial';
+            ctx.textAlign = 'right';
+            ctx.fillText('קטגוריה', x + 150, y + 26);
+            ctx.fillText('אחוז עמידה', x + width / 2 + 50, y + 26);
+            ctx.fillText('כמות', x + width - 30, y + 26);
+            
+            order.forEach((name, i) => {
+                const rowY = y + headerHeight + (i * rowHeight);
+                const data = percentages[name] || { percentage: 0, count: 0, total: 0 };
+                
+                ctx.fillStyle = i % 2 === 0 ? '#f9fafb' : 'white';
+                ctx.fillRect(x, rowY, width, rowHeight);
+                
+                ctx.strokeStyle = '#e5e7eb';
+                ctx.lineWidth = 1;
+                ctx.beginPath();
+                ctx.moveTo(x, rowY + rowHeight);
+                ctx.lineTo(x + width, rowY + rowHeight);
+                ctx.stroke();
+                
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 13px Heebo, Arial';
+                ctx.textAlign = 'right';
+                ctx.fillText(name, x + 150, rowY + 26);
+                
+                const barX = x + 180;
+                const barWidth = 200;
+                ctx.fillStyle = '#e5e7eb';
+                ctx.fillRect(barX, rowY + 14, barWidth, 12);
+                ctx.fillStyle = barColors[name] || '#cbd5e1';
+                const w = (isFinite(data.percentage) ? (data.percentage / 100) * barWidth : 0);
+                ctx.fillRect(barX, rowY + 14, w, 12);
+                
+                ctx.fillStyle = '#374151';
+                ctx.font = 'bold 13px Heebo, Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText((isFinite(data.percentage) ? data.percentage.toFixed(1) : '0.0') + '%', barX + barWidth + 15, rowY + 26);
+                
+                ctx.textAlign = 'right';
+                ctx.font = '13px Heebo, Arial';
+                ctx.fillText(`${data.count} / ${data.total}`, x + width - 30, rowY + 26);
+            });
+            
+            ctx.strokeStyle = '#d1d5db';
+            ctx.lineWidth = 2;
+            ctx.strokeRect(x, y, width, headerHeight + order.length * rowHeight);
         }
-        console.warn('No valid age rows found. Headers:', sampleHeaders, 'Preview:', data.slice(0,5));
-        alert('לא נמצאו שורות עם גיל תקין. בדוק את כותרות הקובץ. ראו Debug בתחתית הדף.');
-        milestonesLoading.classList.remove('active');
-        milestonesUploadCard.style.display = 'block';
-        return;
-    }
 
-    // continue with original flow but using rowsWithAge
-    milestonesAllData = rowsWithAge;
-    milestonesOrgName = (rowsWithAge[0][detected.orgField] || rowsWithAge[0]['org_name'] || rowsWithAge[0]['מעון'] || 'מעון') || 'מעון';
-    const classes = [...new Set(rowsWithAge.map(row => (row[detected.clinicField] || row['clinic_name'] || row['class'] || 'לא ידוע')))];
-    console.log('Using', rowsWithAge.length, 'rows after age filter. Org:', milestonesOrgName, 'Classes:', classes);
-
-    setTimeout(() => {
-        milestonesLoading.classList.remove('active');
-        if (typeof milestonesBuildDashboard === 'function') {
-            milestonesBuildDashboard(classes);
-        } else {
-            const sec = document.createElement('div');
-            sec.className = 'section';
-            sec.appendChild(createSectionTitle(`אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`));
-            milestonesDashboard.appendChild(sec);
+        async function milestonesSavePDF() {
+            if (!jsPDF) {
+                alert('שמירה כ-PDF לא זמינה');
+                return;
+            }
+            const pdf = new jsPDF('p', 'mm', 'a4');
+            const keys = Object.keys(milestonesSectionsData);
+            
+            for (let i = 0; i < keys.length; i++) {
+                const id = keys[i];
+                const sectionData = milestonesSectionsData[id];
+                const canvas = document.getElementById(`chart_${id}`);
+                
+                if (i > 0) pdf.addPage();
+                
+                const tempCanvas = document.createElement('canvas');
+                const ctx = tempCanvas.getContext('2d');
+                
+                tempCanvas.width = 900;
+                tempCanvas.height = 700;
+                
+                ctx.fillStyle = 'white';
+                ctx.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+                
+                ctx.fillStyle = '#1f2937';
+                ctx.font = 'bold 22px Heebo, Arial';
+                ctx.textAlign = 'center';
+                ctx.fillText(sectionData.title, 450, 40);
+                
+                const stats = sectionData.stats;
+                ctx.font = '14px Heebo, Arial';
+                ctx.fillStyle = '#4b5563';
+                ctx.fillText(`סה"כ: ${stats.total}  |  בנים: ${stats.boys}  |  בנות: ${stats.girls}  |  גילאים: ${stats.minAge.toFixed(1)} - ${stats.maxAge.toFixed(1)}`, 450, 70);
+                
+                try {
+                    const chartImg = canvas.toDataURL('image/png');
+                    const img = new Image();
+                    await new Promise((resolve, reject) => {
+                        img.onload = () => {
+                            ctx.drawImage(img, 50, 90, 800, 300);
+                            resolve();
+                        };
+                        img.onerror = reject;
+                        img.src = chartImg;
+                    });
+                } catch (err) {}
+                
+                milestonesDrawTable(ctx, sectionData.percentages, 50, 420, 800);
+                
+                const imgData = tempCanvas.toDataURL('image/png', 1.0);
+                pdf.addImage(imgData, 'PNG', 10, 10, 190, 148);
+            }
+            
+            pdf.save(`דוח_מעון_${milestonesOrgName}.pdf`);
         }
-    }, 300);
-}
+
+        function milestonesReset() {
+            milestonesDashboard.classList.remove('active');
+            milestonesDashboard.innerHTML = '';
+            milestonesUploadCard.style.display = 'block';
+            milestonesFileInput.value = '';
+            milestonesCharts = {};
+            milestonesSectionsData = {};
+            milestonesAllData = null;
+        }
+
+        // ============ SUBJECTIVE APP ============
+        const subjectiveUploadArea = document.getElementById('subjectiveUploadArea');
+        const subjectiveFileInput = document.getElementById('subjectiveFileInput');
+        const subjectiveUploadCard = document.getElementById('subjectiveUploadCard');
+        const subjectiveLoading = document.getElementById('subjectiveLoading');
+        const subjectiveDashboard = document.getElementById('subjectiveDashboard');
+        const subjectiveGlobalLegend = document.getElementById('subjectiveGlobalLegend');
+
+        const BEHAVIOR_COLUMNS = {
+            'behavior_q1_פחד': 'פחד',
+            'behavior_q2_אכילה': 'אכילה',
+            'behavior_q2_אלימות': 'אלימות',
+            'behavior_q2_בכי ממושך': 'בכי ממושך',
+            'behavior_q2_התפרצויות': 'התפרצויות',
+            'behavior_q2_שינה': 'שינה'
+        };
+
+        const SUBJECTIVE_COLORS = {
+            3: '#FFF3B0',
+            4: '#FFD6A5',
+            5: '#FFADAD',
+            other: '#FFFFFF'
+        };
+
+        let subjectiveProcessedData = null;
+        let subjectiveGroupElements = [];
+
+        subjectiveUploadArea.addEventListener('click', () => subjectiveFileInput.click());
+        subjectiveUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); subjectiveUploadArea.style.borderColor = '#059669'; });
+        subjectiveUploadArea.addEventListener('dragleave', () => subjectiveUploadArea.style.borderColor = '#10b981');
+        subjectiveUploadArea.addEventListener('drop', (e) => {
+            e.preventDefault();
+            subjectiveUploadArea.style.borderColor = '#10b981';
+            if (e.dataTransfer.files[0]) subjectiveProcessFile(e.dataTransfer.files[0]);
+        });
+        subjectiveFileInput.addEventListener('change', (e) => {
+            if (e.target.files[0]) subjectiveProcessFile(e.target.files[0]);
+        });
+
+        function subjectiveProcessFile(file) {
+            subjectiveUploadCard.style.display = 'none';
+            subjectiveLoading.classList.add('active');
+            subjectiveGroupElements = [];
+
+            const reader = new FileReader();
+            
+            if (file.name.toLowerCase().endsWith('.csv')) {
+                reader.onload = (e) => {
+                    Papa.parse(e.target.result, {
+                        header: true,
+                        skipEmptyLines: true,
+                        complete: (results) => subjectiveAnalyzeData(results.data)
+                    });
+                };
+                reader.readAsText(file, 'UTF-8');
+            } else {
+                reader.onload = (e) => {
+                    try {
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(firstSheet, { defval: '' });
+                        subjectiveAnalyzeData(jsonData);
+                    } catch (err) {
+                        alert('שגיאה בקריאת קובץ ה-Excel');
+                        subjectiveLoading.classList.remove('active');
+                        subjectiveUploadCard.style.display = 'block';
+                    }
+                };
+                reader.readAsArrayBuffer(file);
+            }
+        }
+
+        function subjectiveAnalyzeData(data) {
+            subjectiveLoading.classList.remove('active');
+
+            if (!data || data.length === 0) {
+                alert('לא נמצאו נתונים בקובץ');
+                subjectiveUploadCard.style.display = 'block';
+                return;
+            }
+
+            const headers = Object.keys(data[0]);
+            const required = ['clinic_name', 'behavior_main'];
+            const missing = required.filter(col => !headers.includes(col));
+            
+            if (missing.length > 0) {
+                alert(`עמודות חסרות: ${missing.join(', ')}`);
+                subjectiveUploadCard.style.display = 'block';
+                return;
+            }
+
+            const availableBehaviorCols = Object.keys(BEHAVIOR_COLUMNS).filter(col => headers.includes(col));
+            
+            if (availableBehaviorCols.length === 0) {
+                alert('לא נמצאו עמודות התנהגות לניתוח');
+                subjectiveUploadCard.style.display = 'block';
+                return;
+            }
+
+            const groups = {};
+            data.forEach(row => {
+                const clinicName = row.clinic_name || 'לא מוגדר';
+                if (!groups[clinicName]) groups[clinicName] = [];
+                groups[clinicName].push(row);
+            });
+
+            subjectiveProcessedData = { groups, availableBehaviorCols };
+            subjectiveGlobalLegend.style.display = 'block';
+            subjectiveBuildDashboard(groups, availableBehaviorCols);
+        }
+
+        function subjectiveBuildDashboard(groups, behaviorCols) {
+            subjectiveDashboard.innerHTML = '';
+            subjectiveGroupElements = [];
+
+            Object.keys(groups).sort().forEach(groupName => {
+                const groupData = groups[groupName];
+                subjectiveRenderGroup(groupName, groupData, behaviorCols);
+            });
+
+            const mainButtons = document.createElement('div');
+            mainButtons.className = 'section';
+            mainButtons.innerHTML = `
+                <div class="buttons-row">
+                    <button class="btn btn-pdf" onclick="subjectiveExportPDF()">📄 ייצוא PDF באיכות גבוהה</button>
+                    <button class="btn btn-excel" onclick="subjectiveExportExcel()">📊 ייצוא Excel</button>
+                    <button class="btn btn-reset" onclick="subjectiveReset()">🔄 העלה קובץ חדש</button>
+                </div>
+            `;
+            subjectiveDashboard.appendChild(mainButtons);
+
+            subjectiveDashboard.classList.add('active');
+        }
+
+        function subjectiveRenderGroup(groupName, groupData, behaviorCols) {
+            const filtered = groupData.filter(row => parseFloat(row.behavior_main) === 2);
+
+            const section = document.createElement('div');
+            section.className = 'group-section';
+            section.id = 'subj-group-' + groupName.replace(/\s+/g, '-').replace(/[^\w\u0590-\u05FF-]/g, '');
+
+            subjectiveGroupElements.push({ name: groupName, element: section });
+
+            const header = document.createElement('div');
+            header.className = 'group-header';
+
+            const titleContainer = document.createElement('div');
+            const title = document.createElement('h2');
+            title.className = 'group-title';
+            title.textContent = `🏫 ${groupName}`;
+            titleContainer.appendChild(title);
+
+            const actionsDiv = document.createElement('div');
+            actionsDiv.className = 'group-actions';
+            const exportBtn = document.createElement('button');
+            exportBtn.className = 'group-export-btn';
+            exportBtn.innerHTML = '📷 ייצוא תמונה';
+            exportBtn.onclick = () => subjectiveExportGroupImage(groupName);
+            actionsDiv.appendChild(exportBtn);
+            titleContainer.appendChild(actionsDiv);
+
+            header.appendChild(titleContainer);
+
+            const stats = document.createElement('div');
+            stats.className = 'group-stats';
+            stats.innerHTML = `
+                <div class="stat-box"><div class="stat-value">${groupData.length}</div><div class="stat-label">סה״כ ילדים</div></div>
+                <div class="stat-box"><div class="stat-value">${filtered.length}</div><div class="stat-label">ילדים בניתוח (behavior_main=2)</div></div>
+            `;
+            header.appendChild(stats);
+            section.appendChild(header);
+
+            if (filtered.length === 0) {
+                const noData = document.createElement('div');
+                noData.className = 'no-data';
+                noData.textContent = '⚠️ אין נתונים להצגה בכיתה זו';
+                section.appendChild(noData);
+                subjectiveDashboard.appendChild(section);
+                return;
+            }
+
+            const grid = document.createElement('div');
+            grid.className = 'charts-grid';
+
+            behaviorCols.forEach(col => {
+                const chartCard = subjectiveCreateChartCard(col, filtered);
+                grid.appendChild(chartCard);
+            });
+
+            section.appendChild(grid);
+
+            const regressionSection = subjectiveCreateRegressionSection(filtered);
+            section.appendChild(regressionSection);
+
+            subjectiveDashboard.appendChild(section);
+        }
+
+        function subjectiveCreateChartCard(column, data) {
+            const N = data.length;
+            let count3 = 0, count4 = 0, count5 = 0;
+
+            data.forEach(row => {
+                const val = parseFloat(row[column]);
+                if (val === 3) count3++;
+                else if (val === 4) count4++;
+                else if (val === 5) count5++;
+            });
+
+            const countOther = N - (count3 + count4 + count5);
+
+            const card = document.createElement('div');
+            card.className = 'chart-card';
+
+            const title = document.createElement('div');
+            title.className = 'chart-title';
+            title.textContent = BEHAVIOR_COLUMNS[column];
+            card.appendChild(title);
+
+            const wrapper = document.createElement('div');
+            wrapper.className = 'chart-wrapper';
+
+            const canvas = document.createElement('canvas');
+            canvas.className = 'pie-chart';
+            canvas.width = 180;
+            canvas.height = 180;
+            wrapper.appendChild(canvas);
+            card.appendChild(wrapper);
+
+            subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, N);
+
+            const pct3 = N > 0 ? ((count3 / N) * 100).toFixed(1) : 0;
+            const pct4 = N > 0 ? ((count4 / N) * 100).toFixed(1) : 0;
+            const pct5 = N > 0 ? ((count5 / N) * 100).toFixed(1) : 0;
+            const pctOther = N > 0 ? ((countOther / N) * 100).toFixed(1) : 0;
+
+            const table = document.createElement('table');
+            table.className = 'data-table';
+            table.innerHTML = `
+                <thead><tr><th>ערך</th><th>מספר</th><th>אחוז</th></tr></thead>
+                <tbody>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[3]};"></span>3</td><td>${count3}</td><td>${pct3}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[4]};"></span>4</td><td>${count4}</td><td>${pct4}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[5]};"></span>5</td><td>${count5}</td><td>${pct5}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS.other}; border: 1px solid #ccc;"></span>אחר</td><td>${countOther}</td><td>${pctOther}%</td></tr>
+                </tbody>
+            `;
+            card.appendChild(table);
+
+            return card;
+        }
+
+        function subjectiveCreateRegressionSection(data) {
+            const section = document.createElement('div');
+            section.className = 'regression-section';
+
+            let zeroCount = 0;
+            data.forEach(row => {
+                const val = row['behavior_נסיגה'];
+                if (val === '0' || val === 0 || parseFloat(val) === 0) zeroCount++;
+            });
+
+            const pct = data.length > 0 ? ((zeroCount / data.length) * 100).toFixed(1) : 0;
+
+            section.innerHTML = `
+                <div class="regression-title">📉 ניתוח נסיגה (behavior_נסיגה)</div>
+                <div class="regression-content">
+                    <div class="regression-stat">
+                        <div class="regression-value">${zeroCount}</div>
+                        <div class="regression-label">ילדים עם נסיגה (ערך 0)</div>
+                    </div>
+                    <div class="regression-stat">
+                        <div class="regression-value">${pct}%</div>
+                        <div class="regression-label">מתוך ${data.length} ילדים</div>
+                    </div>
+                </div>
+            `;
+
+            return section;
+        }
+
+        function subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, total) {
+            const ctx = canvas.getContext('2d');
+            const centerX = canvas.width / 2;
+            const centerY = canvas.height / 2;
+            const radius = Math.min(centerX, centerY) - 10;
+
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            if (total === 0) {
+                ctx.fillStyle = '#eee';
+                ctx.beginPath();
+                ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+                ctx.fill();
+                return;
+            }
+
+            const slices = [
+                { value: count3, color: SUBJECTIVE_COLORS[3] },
+                { value: count4, color: SUBJECTIVE_COLORS[4] },
+                { value: count5, color: SUBJECTIVE_COLORS[5] },
+                { value: countOther, color: SUBJECTIVE_COLORS.other }
+            ];
+
+            let startAngle = -Math.PI / 2;
+
+            slices.forEach(slice => {
+                if (slice.value === 0) return;
+
+                const sliceAngle = (slice.value / total) * Math.PI * 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(centerX, centerY);
+                ctx.arc(centerX, centerY, radius, startAngle, startAngle + sliceAngle);
+                ctx.closePath();
+                ctx.fillStyle = slice.color;
+                ctx.fill();
+                ctx.strokeStyle = slice.color === SUBJECTIVE_COLORS.other ? '#CCCCCC' : '#fff';
+                ctx.lineWidth = 1.5;
+                ctx.stroke();
+
+                if (slice.value / total > 0.05) {
+                    const midAngle = startAngle + sliceAngle / 2;
+                    const labelX = centerX + Math.cos(midAngle) * radius * 0.65;
+                    const labelY = centerY + Math.sin(midAngle) * radius * 0.65;
+                    ctx.fillStyle = '#333';
+                    ctx.font = 'bold 11px Heebo, Arial';
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'middle';
+                    ctx.fillText(((slice.value / total) * 100).toFixed(0) + '%', labelX, labelY);
+                }
+
+                startAngle += sliceAngle;
+            });
+
+            ctx.beginPath();
+            ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
+            ctx.strokeStyle = '#ddd';
+            ctx.lineWidth = 1;
+            ctx.stroke();
+        }
+
+        async function subjectiveExportGroupImage(groupName) {
+            const modal = document.getElementById('exportModal');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            
+            document.getElementById('modalTitle').textContent = 'מייצא תמונה...';
+            modal.style.display = 'flex';
+            progressFill.style.width = '20%';
+            progressText.textContent = 'מכין את התמונה...';
+
+            const groupId = 'subj-group-' + groupName.replace(/\s+/g, '-').replace(/[^\w\u0590-\u05FF-]/g, '');
+            const groupElement = document.getElementById(groupId);
+            
+            if (!groupElement) {
+                alert('לא נמצא');
+                modal.style.display = 'none';
+                return;
+            }
+
+            const exportBtns = groupElement.querySelectorAll('.group-export-btn');
+            exportBtns.forEach(btn => btn.style.display = 'none');
+
+            try {
+                progressFill.style.width = '50%';
+                const canvas = await html2canvas(groupElement, { scale: 3, backgroundColor: '#ffffff' });
+                progressFill.style.width = '90%';
+                
+                canvas.toBlob((blob) => {
+                    const link = document.createElement('a');
+                    link.download = `כיתה_${groupName}_ניתוח_התנהגות.png`;
+                    link.href = URL.createObjectURL(blob);
+                    link.click();
+                    
+                    progressFill.style.width = '100%';
+                    progressText.textContent = 'הושלם!';
+                    setTimeout(() => { modal.style.display = 'none'; }, 500);
+                }, 'image/png', 1.0);
+            } catch (err) {
+                alert('שגיאה: ' + err.message);
+                modal.style.display = 'none';
+            }
+
+            exportBtns.forEach(btn => btn.style.display = 'flex');
+        }
+
+        async function subjectiveExportPDF() {
+            if (subjectiveGroupElements.length === 0) return;
+
+            const modal = document.getElementById('exportModal');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const progressDetail = document.getElementById('progressDetail');
+            
+            document.getElementById('modalTitle').textContent = '📄 מייצא PDF...';
+            modal.style.display = 'flex';
+            progressFill.style.width = '5%';
+
+            try {
+                const pdf = new jsPDF({ orientation: 'landscape', unit: 'mm', format: 'a4' });
+                const pageWidth = pdf.internal.pageSize.getWidth();
+                const pageHeight = pdf.internal.pageSize.getHeight();
+
+                for (let i = 0; i < subjectiveGroupElements.length; i++) {
+                    const group = subjectiveGroupElements[i];
+                    progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`;
+                    progressText.textContent = `מעבד: ${group.name}`;
+                    progressDetail.textContent = `${i + 1} / ${subjectiveGroupElements.length}`;
+
+                    const exportBtns = group.element.querySelectorAll('.group-export-btn');
+                    exportBtns.forEach(btn => btn.style.display = 'none');
+
+                    await new Promise(r => setTimeout(r, 50));
+                    const canvas = await html2canvas(group.element, { scale: 2.5, backgroundColor: '#ffffff' });
+                    exportBtns.forEach(btn => btn.style.display = 'flex');
+
+                    const imgWidth = pageWidth - 20;
+                    let imgHeight = (canvas.height * imgWidth) / canvas.width;
+                    if (imgHeight > pageHeight - 20) {
+                        imgHeight = pageHeight - 20;
+                    }
+
+                    if (i > 0) pdf.addPage();
+                    pdf.addImage(canvas.toDataURL('image/jpeg', 0.95), 'JPEG', 10, 10, imgWidth, imgHeight);
+                }
+
+                progressFill.style.width = '100%';
+                progressText.textContent = 'הושלם!';
+                pdf.save('ניתוח_התנהגות_כיתות.pdf');
+                setTimeout(() => { modal.style.display = 'none'; }, 500);
+            } catch (err) {
+                alert('שגיאה: ' + err.message);
+                modal.style.display = 'none';
+            }
+        }
+
+        function subjectiveExportExcel() {
+            if (!subjectiveProcessedData) return;
+
+            const { groups, availableBehaviorCols } = subjectiveProcessedData;
+            const wsData = [['כיתה', 'תחום', 'ערך 3', 'ערך 4', 'ערך 5', 'אחר', 'סה״כ']];
+            
+            Object.keys(groups).sort().forEach(groupName => {
+                const filtered = groups[groupName].filter(row => parseFloat(row.behavior_main) === 2);
+                if (filtered.length === 0) return;
+                
+                availableBehaviorCols.forEach(col => {
+                    const N = filtered.length;
+                    let count3 = 0, count4 = 0, count5 = 0;
+                    filtered.forEach(row => {
+                        const val = parseFloat(row[col]);
+                        if (val === 3) count3++;
+                        else if (val === 4) count4++;
+                        else if (val === 5) count5++;
+                    });
+                    wsData.push([groupName, BEHAVIOR_COLUMNS[col], count3, count4, count5, N - count3 - count4 - count5, N]);
+                });
+            });
+            
+            const wb = XLSX.utils.book_new();
+            const ws = XLSX.utils.aoa_to_sheet(wsData);
+            XLSX.utils.book_append_sheet(wb, ws, 'ניתוח התנהגות');
+            XLSX.writeFile(wb, 'behavior_analysis.xlsx');
+        }
+
+        function subjectiveReset() {
+            subjectiveDashboard.classList.remove('active');
+            subjectiveDashboard.innerHTML = '';
+            subjectiveUploadCard.style.display = 'block';
+            subjectiveFileInput.value = '';
+            subjectiveGlobalLegend.style.display = 'none';
+            subjectiveProcessedData = null;
+            subjectiveGroupElements = [];
+        }
     </script>
-
-    <!-- Footer קבוע בתחתית הדף: טקסט ולאחריו תמונה ממורכזת מתחת -->
-    <footer class="footer">
-        <p>כלי ניתוח אבני דרך התפתחותיות | נבנה עם ❤️</p>
-        <img src="link_car.png" alt="link car" class="logo">
-    </footer>
 </body>
 </html>
