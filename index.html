@@ -704,6 +704,46 @@
             .charts-grid { grid-template-columns: 1fr; }
             .group-header { flex-direction: column; align-items: flex-start; }
         }
+        
+        /* ============ HEADER WITH LOGOS ============ */
+        .header-with-logos{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 18px;
+            flex-wrap: wrap;
+        }
+
+        .header-logo{
+            width: 76px;
+            height: 76px;
+            object-fit: contain;
+            flex: 0 0 auto;
+        }
+
+        @media (max-width: 768px){
+            .header-logo{
+                width: 58px;
+                height: 58px;
+            }
+        }
+
+/* ============ FOOTER LOGO ============ */
+        .footer{
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #9ca3af;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom-logo{
+            display: block;
+            margin: 14px auto 0;
+            width: 140px;
+            height: auto;
+            object-fit: contain;
+        }
     </style>
 </head>
 <body>
@@ -735,9 +775,13 @@
             <button class="back-button" onclick="goToMenu()">
                 → חזרה לתפריט הראשי
             </button>
-            
+
             <header class="header">
-                <h1> ניתוח אבני דרך התפתחותיות</h1>
+                <div class="header-with-logos">
+                    <img class="header-logo" src="drech_hakesher.jpg" alt="לוגו דרך הקשר">
+                    <h1> ניתוח אבני דרך התפתחותיות</h1>
+                    <img class="header-logo" src="sderot.jpg" alt="לוגו שדרות">
+                </div>
                 <p>העלה קובץ CSV או Excel לניתוח מעון וכיתות</p>
             </header>
 
@@ -765,11 +809,18 @@
             <button class="back-button" onclick="goToMenu()">
                 → חזרה לתפריט הראשי
             </button>
-            
+
             <header class="header">
-                <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">ניתוח שאלון סובייקטיבי</h1>
+                <div class="header-with-logos">
+                    <img class="header-logo" src="drech_hakesher.jpg" alt="לוגו דרך הקשר">
+                    <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">
+                        ניתוח שאלון סובייקטיבי
+                    </h1>
+                    <img class="header-logo" src="sderot.jpg" alt="לוגו שדרות">
+                </div>
                 <p>העלה קובץ CSV או Excel לניתוח נתוני התנהגות לפי כיתות</p>
             </header>
+
 
             <div class="upload-card" id="subjectiveUploadCard">
                 <div class="upload-area" id="subjectiveUploadArea" style="border-color: #10b981;">
@@ -1808,5 +1859,9 @@
             subjectiveGroupElements = [];
         }
     </script>
+    <div class="footer">
+        כלי ניתוח אבני דרך התפתחותיות | נבנה עם ❤️
+        <img class="footer-bottom-logo" src="link_car.png" alt="Link Car">
+    </div>
 </body>
 </html>
