@@ -1616,13 +1616,14 @@
 
             section.appendChild(grid);
 
-            const regressionSection = subjectiveCreateRegressionSection(filtered);
+            const totalN = groupData.length;
+            const regressionSection = subjectiveCreateRegressionSection(filtered, totalN));
             section.appendChild(regressionSection);
 
             subjectiveDashboard.appendChild(section);
         }
 
-        function subjectiveCreateChartCard(column, data) {
+        function subjectiveCreateChartCard(column, data, totalN) {
             const N = data.length;
             let count3 = 0, count4 = 0, count5 = 0;
 
@@ -1633,7 +1634,7 @@
                 else if (val === 5) count5++;
             });
 
-            const countOther = N - (count3 + count4 + count5);
+            const countOther =  Math.max(0, totalN - (count3 + count4 + count5));
 
             const card = document.createElement('div');
             card.className = 'chart-card';
@@ -1653,12 +1654,14 @@
             wrapper.appendChild(canvas);
             card.appendChild(wrapper);
 
-            subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, N);
+            subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, totalN);
 
-            const pct3 = N > 0 ? ((count3 / N) * 100).toFixed(1) : 0;
-            const pct4 = N > 0 ? ((count4 / N) * 100).toFixed(1) : 0;
-            const pct5 = N > 0 ? ((count5 / N) * 100).toFixed(1) : 0;
-            const pctOther = N > 0 ? ((countOther / N) * 100).toFixed(1) : 0;
+            const DEN = Number(totalN) || 0;  // סה"כ תצפיות בכיתה
+
+            const pct3 = DEN > 0 ? ((count3 / DEN) * 100).toFixed(1) : '0.0';
+            const pct4 = DEN > 0 ? ((count4 / DEN) * 100).toFixed(1) : '0.0';
+            const pct5 = DEN > 0 ? ((count5 / DEN) * 100).toFixed(1) : '0.0';
+            const pctOther = DEN > 0 ? ((countOther / DEN) * 100).toFixed(1) : '0.0';
 
             const table = document.createElement('table');
             table.className = 'data-table';
@@ -1676,7 +1679,7 @@
             return card;
         }
 
-        function subjectiveCreateRegressionSection(data) {
+        function subjectiveCreateRegressionSection(data, totalN) {
             const section = document.createElement('div');
             section.className = 'regression-section';
 
@@ -1686,18 +1689,21 @@
                 if (val === '0' || val === 0 || parseFloat(val) === 0) zeroCount++;
             });
 
-            const pct = data.length > 0 ? ((zeroCount / data.length) * 100).toFixed(1) : 0;
+            const DEN = Number(totalN) || 0;
+            const pct = DEN > 0 ? ((zeroCount / DEN) * 100).toFixed(1) : '0.0';
 
             section.innerHTML = `
                 <div class="regression-title">📉 ניתוח נסיגה (behavior_נסיגה)</div>
                 <div class="regression-content">
                     <div class="regression-stat">
                         <div class="regression-value">${zeroCount}</div>
-                        <div class="regression-label">ילדים עם נסיגה (ערך 0)</div>
+                        <div class="regression-label">
+                            ${zeroCount} ילדים עם נסיגה<br>
+                            (${pct}% מתוך כלל הכיתה)
                     </div>
                     <div class="regression-stat">
                         <div class="regression-value">${pct}%</div>
-                        <div class="regression-label">מתוך ${data.length} ילדים</div>
+                        <div class="regression-label">מתוך ${data.length} ילדים בכיתה</div>
                     </div>
                 </div>
             `;
