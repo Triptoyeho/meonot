@@ -1606,10 +1606,13 @@
             const grid = document.createElement('div');
             grid.className = 'charts-grid';
 
+            const totalN = groupData.length; // סה"כ תצפיות בכיתה (לפני פילטר)
+            
             behaviorCols.forEach(col => {
-                const chartCard = subjectiveCreateChartCard(col, filtered);
+                const chartCard = subjectiveCreateChartCard(col, filtered, totalN);
                 grid.appendChild(chartCard);
             });
+
 
             section.appendChild(grid);
 
