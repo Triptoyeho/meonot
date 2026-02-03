@@ -747,32 +747,32 @@
     </style>
 </head>
 <body>
-    <!-- ============ MAIN MENU ============ -->
 
-    <div class="main-menu" id="mainMenu">
-        <div class="menu-header">
-            <div class="header-with-logos">
-                <img class="header-logo" src="drech_hakesher.jpg" alt="לוגו דרך הקשר">
-                <h1>מערכת ניתוח התפתחותי</h1>
-                <img class="header-logo" src="sderot.jpg" alt="לוגו שדרות">
-            </div>
-            <p>בחר את סוג הניתוח שברצונך לבצע</p>
-        </div>
-
-        <div class="menu-cards">
-            <div class="menu-card milestones" onclick="showApp('milestones')">
-                <div class="menu-card-icon">📊</div>
-                <h2>ניתוח אבני דרך התפתחותיות</h2>
-                <p>ניתוח עמידה באבני דרך התפתחותיות בתחומים: חברה, שפה, מוטוריקה גסה ומוטוריקה עדינה</p>
-            </div>
-
-            <div class="menu-card subjective" onclick="showApp('subjective')">
-                <div class="menu-card-icon">📋</div>
-                <h2>ניתוח שאלון סובייקטיבי</h2>
-                <p>ניתוח שאלוני התנהגות: פחד, אכילה, אלימות, בכי ממושך, התפרצויות, שינה ונסיגה</p>
-            </div>
-        </div>
+  <!-- ============ MAIN MENU ============ -->
+  <div class="main-menu" id="mainMenu">
+    <div class="menu-header">
+      <div class="header-with-logos">
+        <img class="header-logo" src="drech_hakesher.jpg" alt="לוגו דרך הקשר">
+        <h1>מערכת ניתוח התפתחותי</h1>
+        <img class="header-logo" src="sderot.jpg" alt="לוגו שדרות">
+      </div>
+      <p>בחר את סוג הניתוח שברצונך לבצע</p>
     </div>
+
+    <div class="menu-cards">
+      <div class="menu-card milestones" onclick="showApp('milestones')">
+        <div class="menu-card-icon">📊</div>
+        <h2>ניתוח אבני דרך התפתחותיות</h2>
+        <p>ניתוח עמידה באבני דרך התפתחותיות בתחומים: חברה, שפה, מוטוריקה גסה ומוטוריקה עדינה</p>
+      </div>
+
+      <div class="menu-card subjective" onclick="showApp('subjective')">
+        <div class="menu-card-icon">📋</div>
+        <h2>ניתוח שאלון סובייקטיבי</h2>
+        <p>ניתוח שאלוני התנהגות: פחד, אכילה, אלימות, בכי ממושך, התפרצויות, שינה ונסיגה</p>
+      </div>
+    </div>
+  </div>
 
     <!-- ============ MILESTONES APP ============ -->
     <div class="app-container" id="milestonesApp">
@@ -1605,22 +1605,26 @@
 
             const grid = document.createElement('div');
             grid.className = 'charts-grid';
-
-            const totalN = groupData.length; // סה"כ תצפיות בכיתה (לפני פילטר)
+            
+            const grid = document.createElement('div');
+            grid.className = 'charts-grid';
+            
+            const totalN = groupData.length; // סה"כ תצפיות בכיתה (פעם אחת בלבד)
             
             behaviorCols.forEach(col => {
                 const chartCard = subjectiveCreateChartCard(col, filtered, totalN);
                 grid.appendChild(chartCard);
             });
-
-
+            
             section.appendChild(grid);
-
-            const totalN = groupData.length;
-            const regressionSection = subjectiveCreateRegressionSection(filtered, totalN));
+            
+            // שימוש חוזר ב־totalN — בלי להגדיר שוב
+            const regressionSection = subjectiveCreateRegressionSection(filtered, totalN);
             section.appendChild(regressionSection);
-
+            
             subjectiveDashboard.appendChild(section);
+
+
         }
 
         function subjectiveCreateChartCard(column, data, totalN) {
