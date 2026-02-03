@@ -1920,8 +1920,12 @@
 
                     
                     // לוגואים – פינה שמאלית תחתונה
-                    pdf.addImage('drech_hakesher.jpg', 'JPEG', 10, pageHeight - 24, 18, 18);
-                    pdf.addImage('link_car.png', 'PNG', 45, pageHeight - 21, 26, 10);
+                    const blockW = 14 + 6 + 20;       // רוחב דרך הקשר + רווח + רוחב לינק-קאר
+                    const startX = (pageWidth - blockW) / 2;
+                    
+                    pdf.addImage('drech_hakesher.jpg', 'JPEG', startX,         pageHeight - 26, 14, 14);
+                    pdf.addImage('link_car.png',       'PNG',  startX + 14 + 6, pageHeight - 24, 20, 8);
+
 
 
                 }
