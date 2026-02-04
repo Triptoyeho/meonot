@@ -720,6 +720,11 @@
             object-fit: contain;
             flex: 0 0 auto;
         }
+        .link-logo{
+            width: 150px;
+            height: auto;
+        }
+
 
         @media (max-width: 768px){
             .header-logo{
@@ -752,9 +757,9 @@
   <div class="main-menu" id="mainMenu">
     <div class="menu-header">
       <div class="header-with-logos">
-        <img class="header-logo" src="branco.jpg" alt="לוגו דרך הקשר">
+        <img class="header-logo" src="branco.jpg" alt="ברנקו">
         <h1>מערכת ניתוח התפתחותי</h1>
-        <img class="header-logo" src="link_car.png" alt="לוגו לינק">
+        <img class="header-logo link-logo" src="link_car.png" alt="לינק">
       </div>
       <p>בחר את סוג הניתוח שברצונך לבצע</p>
     </div>
@@ -785,7 +790,7 @@
                 <div class="header-with-logos">
                     <img class="header-logo" src="branco.jpg" alt="ברנקו">
                     <h1> ניתוח אבני דרך התפתחותיות</h1>
-                    <img class="header-logo" src="link_car.png" alt="לינק">
+                    <img class="header-logo link-logo" src="link_car.png" alt="לינק">
                 </div>
                 <p>העלה קובץ CSV או Excel לניתוח מעון וכיתות</p>
             </header>
@@ -821,7 +826,7 @@
                     <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">
                         ניתוח שאלון סובייקטיבי
                     </h1>
-                    <img class="header-logo" src="link_car.png" alt="לינק">
+                    <img class="header-logo link-logo" src="link_car.png" alt="לינק">
                 </div>
                 <p>העלה קובץ CSV או Excel לניתוח נתוני התנהגות לפי כיתות</p>
             </header>
@@ -1923,7 +1928,7 @@
                     const blockW = 14 + 6 + 20;       // רוחב דרך הקשר + רווח + רוחב לינק-קאר
                     const startX = (pageWidth - blockW) / 2;
                     
-                    pdf.addImage(branco.jpg', 'JPEG', startX,         pageHeight - 26, 14, 14);
+                    pdf.addImage('branco.jpg', 'JPEG', startX,         pageHeight - 26, 14, 14);
                     pdf.addImage('link_car.png',       'PNG',  startX + 14 + 6, pageHeight - 24, 20, 8);
 
 
