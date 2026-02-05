@@ -689,6 +689,21 @@
             font-size: 0.85em;
             margin-top: 8px;
         }
+        .no-difficulty-msg{
+          width: 180px;
+          height: 180px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          text-align: center;
+          padding: 14px;
+          border-radius: 16px;
+          background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+          border: 1px solid #22c55e;
+          color: #166534;
+          font-weight: 700;
+        }
+
 
         @media (max-width: 992px) {
             .charts-grid { grid-template-columns: repeat(2, 1fr); }
@@ -823,8 +838,9 @@
             <header class="header">
                 <div class="header-with-logos">
                     <img class="header-logo" src="branco.jpg" alt="ברנקו">
-                    <h1 style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">
-                        ניתוח שאלון סובייקטיבי
+                    <h1 id="subjectiveTitleMain"
+                        style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); -webkit-background-clip: text; background-clip: text;">
+                      ניתוח שאלון סובייקטיבי
                     </h1>
                     <img class="header-logo link-logo" src="link_car.png" alt="לינק">
                 </div>
@@ -862,8 +878,8 @@
                         <span>ערך 5 - קושי משמעותי</span>
                     </div>
                     <div class="global-legend-item">
-                        <div class="legend-color-box" style="background: #FFFFFF; border: 1px solid #ccc;"></div>
-                        <span>אחר - ללא קושי משמעותי</span>
+                      <div class="legend-color-box" style="background: #DCFCE7; border: 1px solid #22c55e;"></div>
+                      <span>אין קושי מדווח 😊</span>
                     </div>
                 </div>
             </div>
@@ -1447,11 +1463,13 @@
             3: '#FFF3B0',
             4: '#FFD6A5',
             5: '#FFADAD',
-            other: '#FFFFFF'
+            other: '#DCFCE7'
         };
 
         let subjectiveProcessedData = null;
         let subjectiveGroupElements = [];
+        let subjectiveOrgName = '';
+
 
         subjectiveUploadArea.addEventListener('click', () => subjectiveFileInput.click());
         subjectiveUploadArea.addEventListener('dragover', (e) => { e.preventDefault(); subjectiveUploadArea.style.borderColor = '#059669'; });
@@ -1506,6 +1524,17 @@
                 alert('לא נמצאו נתונים בקובץ');
                 subjectiveUploadCard.style.display = 'block';
                 return;
+            }
+            subjectiveOrgName =
+              (data[0] && data[0].org_name)
+                ? String(data[0].org_name).trim()
+                : '';
+            
+            const titleEl = document.getElementById('subjectiveTitleMain');
+            if (titleEl) {
+              titleEl.textContent = subjectiveOrgName
+                ? `ניתוח שאלון סובייקטיבי – ${subjectiveOrgName}`
+                : 'ניתוח שאלון סובייקטיבי';
             }
 
             const headers = Object.keys(data[0]);
@@ -1593,8 +1622,10 @@
             const stats = document.createElement('div');
             stats.className = 'group-stats';
             stats.innerHTML = `
-                <div class="stat-box"><div class="stat-value">${groupData.length}</div><div class="stat-label">סה״כ ילדים</div></div>
-                <div class="stat-box"><div class="stat-value">${filtered.length}</div><div class="stat-label">ילדים בניתוח (behavior_main=2)</div></div>
+              <div class="stat-box">
+                <div class="stat-value">${groupData.length}</div>
+                <div class="stat-label">סה״כ ילדים בכיתה</div>
+              </div>
             `;
             header.appendChild(stats);
             section.appendChild(header);
@@ -1621,9 +1652,6 @@
             
             section.appendChild(grid);
             
-            // שימוש חוזר ב־totalN — בלי להגדיר שוב
-            const regressionSection = subjectiveCreateRegressionSection(filtered, totalN);
-            section.appendChild(regressionSection);
             
             subjectiveDashboard.appendChild(section);
 
@@ -1642,6 +1670,7 @@
             });
 
             const countOther =  Math.max(0, totalN - (count3 + count4 + count5));
+            const hasAnyDifficulty = (count3 + count4 + count5) > 0;
 
             const card = document.createElement('div');
             card.className = 'chart-card';
@@ -1653,15 +1682,24 @@
 
             const wrapper = document.createElement('div');
             wrapper.className = 'chart-wrapper';
-
-            const canvas = document.createElement('canvas');
-            canvas.className = 'pie-chart';
-            canvas.width = 180;
-            canvas.height = 180;
-            wrapper.appendChild(canvas);
+            
+            if (!hasAnyDifficulty) {
+                const msg = document.createElement('div');
+                msg.className = 'no-difficulty-msg';
+                msg.textContent = 'אין קושי מדווח 😊';
+                wrapper.appendChild(msg);
+            } else {
+                const canvas = document.createElement('canvas');
+                canvas.className = 'pie-chart';
+                canvas.width = 180;
+                canvas.height = 180;
+                wrapper.appendChild(canvas);
+            
+                subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, totalN);
+            }
+            
             card.appendChild(wrapper);
 
-            subjectiveDrawPieChart(canvas, count3, count4, count5, countOther, totalN);
 
             const DEN = Number(totalN) || 0;  // סה"כ תצפיות בכיתה
 
@@ -1673,14 +1711,16 @@
             const table = document.createElement('table');
             table.className = 'data-table';
             table.innerHTML = `
-                <thead><tr><th>ערך</th><th>מספר</th><th>אחוז</th></tr></thead>
-                <tbody>
-                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[3]};"></span>3</td><td>${count3}</td><td>${pct3}%</td></tr>
-                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[4]};"></span>4</td><td>${count4}</td><td>${pct4}%</td></tr>
-                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[5]};"></span>5</td><td>${count5}</td><td>${pct5}%</td></tr>
-                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS.other}; border: 1px solid #ccc;"></span>אחר</td><td>${countOther}</td><td>${pctOther}%</td></tr>
-                </tbody>
+              <thead><tr><th>רמת קושי</th><th>מספר</th><th>אחוז</th></tr></thead>
+              <tbody>
+                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[3]};"></span>קושי קל</td><td>${count3}</td><td>${pct3}%</td></tr>
+                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[4]};"></span>קושי בינוני</td><td>${count4}</td><td>${pct4}%</td></tr>
+                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[5]};"></span>קושי רב</td><td>${count5}</td><td>${pct5}%</td></tr>
+                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS.other}; border: 1px solid #22c55e;"></span>אין קושי מדווח 😊</td><td>${countOther}</td><td>${pctOther}%</td></tr>
+              </tbody>
             `;
+
+
             card.appendChild(table);
 
             return card;
