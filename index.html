@@ -1990,10 +1990,11 @@
                     
                     // מרכז גם אופקי וגם אנכי בתוך האזור (כולל אחרי trim)
                     const x = (pageWidth - imgWidth) / 2;
-                    const titleOffset = 18;
+                    const titleOffset = (i === 0) ? 15 : 0;
                     const y = margin + titleOffset + (maxHeight - imgHeight) / 2;
+
                     
-                    if (i > 0) pdf.addPage();
+                    if (i === 0) {
                     // כותרת + שם מעון בראש העמוד
                     // ===== כותרת כ-IMAGE (עברית תקינה) =====
                     const titleCanvas = document.createElement('canvas');
@@ -2023,6 +2024,7 @@
                     const titleImgHeight = (titleCanvas.height * titleImgWidth) / titleCanvas.width;
                     
                     pdf.addImage(titleImg, 'PNG', 10, 8, titleImgWidth, titleImgHeight);
+                    }
 
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
 
