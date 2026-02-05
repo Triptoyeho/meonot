@@ -1708,23 +1708,21 @@
             const pct5 = DEN > 0 ? ((count5 / DEN) * 100).toFixed(1) : '0.0';
             const pctOther = DEN > 0 ? ((countOther / DEN) * 100).toFixed(1) : '0.0';
 
-            const table = document.createElement('table');
-            table.className = 'data-table';
-            table.innerHTML = `
-              <thead><tr><th>רמת קושי</th><th>מספר</th><th>אחוז</th></tr></thead>
-              <tbody>
-                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[3]};"></span>קושי קל</td><td>${count3}</td><td>${pct3}%</td></tr>
-                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[4]};"></span>קושי בינוני</td><td>${count4}</td><td>${pct4}%</td></tr>
-                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[5]};"></span>קושי רב</td><td>${count5}</td><td>${pct5}%</td></tr>
-                <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS.other}; border: 1px solid #22c55e;"></span>אין קושי מדווח 😊</td><td>${countOther}</td><td>${pctOther}%</td></tr>
-              </tbody>
-            `;
-
-
-            card.appendChild(table);
-
+            if (hasAnyDifficulty) {
+                const table = document.createElement('table');
+                table.className = 'data-table';
+                table.innerHTML = `
+                  <thead><tr><th>רמת קושי</th><th>מספר</th><th>אחוז</th></tr></thead>
+                  <tbody>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[3]};"></span>קושי קל</td><td>${count3}</td><td>${pct3}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[4]};"></span>קושי בינוני</td><td>${count4}</td><td>${pct4}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS[5]};"></span>קושי רב</td><td>${count5}</td><td>${pct5}%</td></tr>
+                    <tr><td><span class="color-indicator" style="background: ${SUBJECTIVE_COLORS.other}; border: 1px solid #22c55e;"></span>אין קושי מדווח 😊</td><td>${countOther}</td><td>${pctOther}%</td></tr>
+                  </tbody>
+                `;
+                card.appendChild(table);
+            }
             return card;
-        }
 
         function subjectiveCreateRegressionSection(data, totalN) {
             const section = document.createElement('div');
@@ -1991,7 +1989,7 @@
                     
                     // מרכז גם אופקי וגם אנכי בתוך האזור (כולל אחרי trim)
                     const x = (pageWidth - imgWidth) / 2;
-                    const titleOffset = 30;
+                    const titleOffset = 18;
                     const y = margin + titleOffset + (maxHeight - imgHeight) / 2;
                     
                     if (i > 0) pdf.addPage();
