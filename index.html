@@ -1957,7 +1957,11 @@
                 const pageHeight = pdf.internal.pageSize.getHeight();
 
                 for (let i = 0; i < subjectiveGroupElements.length; i++) {
+                    
                     const group = subjectiveGroupElements[i];
+
+                    if (i > 0) pdf.addPage();
+                    
                     progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`;
                     progressText.textContent = `מעבד: ${group.name}`;
                     progressDetail.textContent = `${i + 1} / ${subjectiveGroupElements.length}`;
