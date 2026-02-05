@@ -1995,6 +1995,17 @@
                     const y = margin + titleOffset + (maxHeight - imgHeight) / 2;
                     
                     if (i > 0) pdf.addPage();
+                    // כותרת + שם מעון בראש העמוד
+                    pdf.setFont('helvetica', 'bold');
+                    pdf.setFontSize(14);
+                    pdf.setTextColor(22, 101, 52); // ירוק כהה
+                    
+                    const titleText = subjectiveOrgName
+                      ? `ניתוח שאלון סובייקטיבי – ${subjectiveOrgName}`
+                      : 'ניתוח שאלון סובייקטיבי';
+                    
+                    pdf.text(titleText, pageWidth / 2, 14, { align: 'center' });
+
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
 
                     
