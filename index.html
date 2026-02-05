@@ -1991,20 +1991,39 @@
                     
                     // מרכז גם אופקי וגם אנכי בתוך האזור (כולל אחרי trim)
                     const x = (pageWidth - imgWidth) / 2;
-                    const titleOffset = 18;
+                    const titleOffset = 30;
                     const y = margin + titleOffset + (maxHeight - imgHeight) / 2;
                     
                     if (i > 0) pdf.addPage();
                     // כותרת + שם מעון בראש העמוד
-                    pdf.setFont('helvetica', 'bold');
-                    pdf.setFontSize(14);
-                    pdf.setTextColor(22, 101, 52); // ירוק כהה
+                    // ===== כותרת כ-IMAGE (עברית תקינה) =====
+                    const titleCanvas = document.createElement('canvas');
+                    const titleCtx = titleCanvas.getContext('2d');
+                    
+                    titleCanvas.width = 1200;
+                    titleCanvas.height = 80;
+                    
+                    titleCtx.fillStyle = '#ffffff';
+                    titleCtx.fillRect(0, 0, titleCanvas.width, titleCanvas.height);
+                    
+                    titleCtx.fillStyle = '#166534';
+                    titleCtx.font = 'bold 36px Heebo, Arial';
+                    titleCtx.textAlign = 'center';
+                    titleCtx.textBaseline = 'middle';
                     
                     const titleText = subjectiveOrgName
                       ? `ניתוח שאלון סובייקטיבי – ${subjectiveOrgName}`
                       : 'ניתוח שאלון סובייקטיבי';
                     
-                    pdf.text(titleText, pageWidth / 2, 14, { align: 'center' });
+                    titleCtx.fillText(titleText, titleCanvas.width / 2, titleCanvas.height / 2);
+                    
+                    const titleImg = titleCanvas.toDataURL('image/png');
+                    
+                    // ציור הכותרת ב-PDF
+                    const titleImgWidth = pageWidth - 20;
+                    const titleImgHeight = (titleCanvas.height * titleImgWidth) / titleCanvas.width;
+                    
+                    pdf.addImage(titleImg, 'PNG', 10, 8, titleImgWidth, titleImgHeight);
 
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
 
