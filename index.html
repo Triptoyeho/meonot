@@ -1466,6 +1466,16 @@
             other: '#DCFCE7'
         };
 
+        const SUBJECTIVE_TITLES = {
+          "אלימות": "תרשים דיווחים על הבעת התנהגות אלימה בקרב ילדי הכיתה",
+          "אכילה": "תרשים עוצמת הקשיים שדווחו בתחום האכילה בקרב ילדי הכיתה",
+          "שינה": "תרשים עוצמת הקשיים שדווחו בתחום השינה בקרב ילדי הכיתה",
+          "פחד": "תרשים עוצמת הקשיים שדווחו סביב ביטויי פחד בקרב ילדי הכיתה",
+          "התפרצויות": "תרשים עוצמת הקשיים שדווחו סביב התפרצויות בקרב ילדי הכיתה",
+          "בכי": "תרשים עוצמת הקשיים שדווחו סביב בכי בקרב ילדי הכיתה"
+        };
+
+
         let subjectiveProcessedData = null;
         let subjectiveGroupElements = [];
         let subjectiveOrgName = '';
@@ -1677,7 +1687,8 @@
 
             const title = document.createElement('div');
             title.className = 'chart-title';
-            title.textContent = BEHAVIOR_COLUMNS[column];
+            const shortLabel = BEHAVIOR_COLUMNS[column];
+            title.textContent = SUBJECTIVE_TITLES[shortLabel] || shortLabel;
             card.appendChild(title);
 
             const wrapper = document.createElement('div');
