@@ -764,6 +764,10 @@
             height: auto;
             object-fit: contain;
         }
+        .chart-header { margin-bottom: 8px; text-align: center; }
+        .chart-title-main { font-size: 17px; font-weight: 700; margin-bottom: 2px; text-align: center;}
+        .chart-title-sub { font-size: 13px; color: #4b5563; line-height: 1.3; }
+
     </style>
 </head>
 <body>
@@ -1467,13 +1471,32 @@
         };
 
         const SUBJECTIVE_TITLES = {
-          "אלימות": "תרשים דיווחים על הבעת התנהגות אלימה בקרב ילדי הכיתה",
-          "אכילה": "תרשים עוצמת הקשיים שדווחו בתחום האכילה בקרב ילדי הכיתה",
-          "שינה": "תרשים עוצמת הקשיים שדווחו בתחום השינה בקרב ילדי הכיתה",
-          "פחד": "תרשים עוצמת הקשיים שדווחו סביב ביטויי פחד בקרב ילדי הכיתה",
-          "התפרצויות": "תרשים עוצמת הקשיים שדווחו סביב התפרצויות בקרב ילדי הכיתה",
-          "בכי ממושך": "תרשים עוצמת הקשיים שדווחו סביב בכי בקרב ילדי הכיתה"
+          "אלימות": {
+            title: "התנהגות אלימה",
+            subtitle: "דיווחים על הבעת התנהגות אלימה בקרב ילדי הכיתה"
+          },
+          "אכילה": {
+            title: "אכילה",
+            subtitle: "הקשיים שדווחו בתחום האכילה בקרב ילדי הכיתה"
+          },
+          "שינה": {
+            title: "שינה",
+            subtitle: "הקשיים שדווחו בתחום השינה בקרב ילדי הכיתה"
+          },
+          "פחד": {
+            title: "פחד",
+            subtitle: "הקשיים שדווחו סביב ביטויי פחד בקרב ילדי הכיתה"
+          },
+          "התפרצויות": {
+            title: "התפרצויות",
+            subtitle: "הקשיים שדווחו סביב התפרצויות בקרב ילדי הכיתה"
+          },
+          "בכי": {
+            title: "בכי",
+            subtitle: "הקשיים שדווחו סביב בכי בקרב ילדי הכיתה"
+          }
         };
+
 
 
         let subjectiveProcessedData = null;
@@ -1601,7 +1624,10 @@
         }
 
         function subjectiveRenderGroup(groupName, groupData, behaviorCols) {
-            const filtered = groupData.filter(row => parseFloat(row.behavior_main) === 2);
+            const filtered = groupData.filter(row => {
+              const v = Number(row.behavior_main);
+              return v === 2 || v === 0;
+            });
 
             const section = document.createElement('div');
             section.className = 'group-section';
@@ -1685,11 +1711,26 @@
             const card = document.createElement('div');
             card.className = 'chart-card';
 
-            const title = document.createElement('div');
-            title.className = 'chart-title';
+            const headerWrapper = document.createElement('div');
+            headerWrapper.className = 'chart-header';
+            
             const shortLabel = BEHAVIOR_COLUMNS[column];
-            title.textContent = SUBJECTIVE_TITLES[shortLabel] || shortLabel;
-            card.appendChild(title);
+            const titleData = SUBJECTIVE_TITLES[shortLabel];
+            
+            // כותרת ראשית
+            const title = document.createElement('div');
+            title.className = 'chart-title-main';
+            title.textContent = titleData ? titleData.title : shortLabel;
+            
+            // כותרת משנית
+            const subtitle = document.createElement('div');
+            subtitle.className = 'chart-title-sub';
+            subtitle.textContent = titleData ? titleData.subtitle : '';
+            
+            headerWrapper.appendChild(title);
+            headerWrapper.appendChild(subtitle);
+            card.appendChild(headerWrapper);
+
 
             const wrapper = document.createElement('div');
             wrapper.className = 'chart-wrapper';
