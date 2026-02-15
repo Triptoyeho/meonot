@@ -1430,6 +1430,14 @@
                 const y = margin + (i % 2) * (halfMaxH + gap);
         
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+                // ===== תאריך בפינה שמאלית עליונה =====
+                const today = new Date();
+                const dateStr = today.toLocaleDateString('he-IL');
+                
+                pdf.setFontSize(9);
+                pdf.setTextColor(120);
+                pdf.text(dateStr, 8, 8); // שמאל למעלה
+
             }
         
             pdf.save(`דוח_מעון_${milestonesOrgName}.pdf`);
@@ -2083,6 +2091,14 @@
                     }
 
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+                    // ===== תאריך בפינה שמאלית עליונה =====
+                    const today = new Date();
+                    const dateStr = today.toLocaleDateString('he-IL');
+                    
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(120);
+                    pdf.text(dateStr, 8, 8); // שמאל למעלה
+
 
                     
                     // לוגואים – פינה שמאלית תחתונה
