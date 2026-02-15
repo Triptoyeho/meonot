@@ -941,6 +941,8 @@
         let milestonesOrgName = '';
         let milestonesCharts = {};
         let milestonesSectionsData = {};
+        let milestonesReportDate = '';
+
 
         const hebrewNames = {
             'UnusualSocial': 'חברה',
@@ -1021,6 +1023,13 @@
                 milestonesUploadCard.style.display = 'block';
                 return;
             }
+            // ===== שמירת תאריך ראשון מהקובץ =====
+            if (data.length > 0 && data[0]['Date']) {
+                milestonesReportDate = String(data[0]['Date']).trim();
+            } else {
+                milestonesReportDate = '';
+            }
+
 
             milestonesOrgName = milestonesAllData[0]['org_name'] || 'מעון';
             const classes = [...new Set(milestonesAllData.map(row => row['clinic_name'] || 'לא ידוע'))];
@@ -1431,14 +1440,13 @@
         
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
                 // ===== תאריך בפינה שמאלית עליונה =====
-                const today = new Date();
-                const dateStr = today.toLocaleDateString('he-IL');
-                
-                pdf.setFontSize(9);
-                pdf.setTextColor(120);
-                pdf.text(dateStr, 8, 8); // שמאל למעלה
+                // ===== תאריך מהקובץ =====
+                if (milestonesReportDate) {
+                    pdf.setFontSize(9);
+                    pdf.setTextColor(120);
+                    pdf.text(milestonesReportDate, 8, 8);
+                }
 
-            }
         
             pdf.save(`דוח_מעון_${milestonesOrgName}.pdf`);
         }
@@ -1510,6 +1518,8 @@
         let subjectiveProcessedData = null;
         let subjectiveGroupElements = [];
         let subjectiveOrgName = '';
+        let subjectiveReportDate = '';
+
 
 
         subjectiveUploadArea.addEventListener('click', () => subjectiveFileInput.click());
@@ -1560,12 +1570,20 @@
 
         function subjectiveAnalyzeData(data) {
             subjectiveLoading.classList.remove('active');
+            
 
             if (!data || data.length === 0) {
                 alert('לא נמצאו נתונים בקובץ');
                 subjectiveUploadCard.style.display = 'block';
                 return;
             }
+            // ===== שמירת תאריך ראשון מהקובץ =====
+            if (data.length > 0 && data[0]['Date']) {
+                subjectiveReportDate = String(data[0]['Date']).trim();
+            } else {
+                subjectiveReportDate = '';
+            }
+
             subjectiveOrgName =
               (data[0] && data[0].org_name)
                 ? String(data[0].org_name).trim()
@@ -1595,6 +1613,7 @@
                 subjectiveUploadCard.style.display = 'block';
                 return;
             }
+            
 
             const groups = {};
             data.forEach(row => {
@@ -1606,6 +1625,9 @@
             subjectiveProcessedData = { groups, availableBehaviorCols };
             subjectiveGlobalLegend.style.display = 'block';
             subjectiveBuildDashboard(groups, availableBehaviorCols);
+
+
+
         }
 
         function subjectiveBuildDashboard(groups, behaviorCols) {
@@ -2092,12 +2114,13 @@
 
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
                     // ===== תאריך בפינה שמאלית עליונה =====
-                    const today = new Date();
-                    const dateStr = today.toLocaleDateString('he-IL');
-                    
-                    pdf.setFontSize(9);
-                    pdf.setTextColor(120);
-                    pdf.text(dateStr, 8, 8); // שמאל למעלה
+                    // ===== תאריך מהקובץ =====
+                    if (subjectiveReportDate) {
+                        pdf.setFontSize(9);
+                        pdf.setTextColor(120);
+                        pdf.text(subjectiveReportDate, 8, 8);
+                    }
+                    שמאל למעלה
 
 
                     
