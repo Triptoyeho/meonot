@@ -1391,17 +1391,18 @@
             const halfMaxH = (pageH - margin * 2 - gap) / 2;
         
             // כדי שזה ייראה כמו באתר: מצלמים HTML עם html2canvas
+            
             for (let i = 0; i < sections.length; i++) {
                 const sec = sections[i];
-        
+            
                 // מסתירים את כפתור "שמור כתמונה" בתוך הסקשן כדי שלא יופיע ב-PDF
                 const buttonsRow = sec.querySelector('.buttons-row');
                 const prevDisplay = buttonsRow ? buttonsRow.style.display : null;
                 if (buttonsRow) buttonsRow.style.display = 'none';
-        
+            
                 // נותנים רגע קטן לדפדפן לעדכן רינדור לפני צילום
                 await new Promise(r => setTimeout(r, 60));
-        
+            
                 let canvas;
                 try {
                     canvas = await html2canvas(sec, {
@@ -1415,42 +1416,41 @@
                     alert('שגיאה בצילום הסקשן ל-PDF: ' + err.message);
                     return;
                 }
-        
+            
                 // מחזירים כפתורים
                 if (buttonsRow) buttonsRow.style.display = prevDisplay || '';
-        
+            
                 // כל 2 סקשנים—דף חדש (מלבד הראשון)
                 if (i > 0 && i % 2 === 0) pdf.addPage();
-        
+            
                 // חישוב התאמת גודל לתוך חצי עמוד
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
-        
+            
                 let imgW = pageW - margin * 2;
                 let imgH = (canvas.height * imgW) / canvas.width;
-        
+            
                 // אם התמונה גבוהה מדי לחצי עמוד—מקטינים פרופורציונלית
                 if (imgH > halfMaxH) {
                     const scale = halfMaxH / imgH;
                     imgW = imgW * scale;
                     imgH = halfMaxH;
                 }
-        
+            
                 const x = (pageW - imgW) / 2;
                 const y = margin + (i % 2) * (halfMaxH + gap);
-        
+            
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
-                // ===== תאריך בפינה שמאלית עליונה =====
-                // ===== תאריך מהקובץ =====
+            
+                // ===== תאריך מהקובץ (פינה שמאלית עליונה) =====
                 if (milestonesReportDate) {
                     pdf.setFontSize(9);
                     pdf.setTextColor(120);
-                    pdf.text(milestonesReportDate, 8, 8);
+                    pdf.text(String(milestonesReportDate), 8, 8);
                 }
-
-        
+            } // ✅ סוגר של ה-for
+            
             pdf.save(`דוח_מעון_${milestonesOrgName}.pdf`);
-        }
-
+            } // ✅ סוגר של הפונקציה milestonesSavePDF
 
         function milestonesReset() {
             milestonesDashboard.classList.remove('active');
@@ -2120,7 +2120,6 @@
                         pdf.setTextColor(120);
                         pdf.text(subjectiveReportDate, 8, 8);
                     }
-                    שמאל למעלה
 
 
                     
