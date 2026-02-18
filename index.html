@@ -1086,12 +1086,12 @@
             milestonesCharts = {};
             milestonesSectionsData = {};
 
-            const generalSection = milestonesCreateSection('general', `אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`, milestonesAllData);
+            const generalSection = milestonesCreateSection('general', `אבני דרך התפתחותיות בהן לא עמדו ילדי מעון "${milestonesOrgName}"`, milestonesAllData);
             milestonesDashboard.appendChild(generalSection);
 
             classes.forEach((className, index) => {
                 const classData = milestonesAllData.filter(r => (r['clinic_name'] || 'לא ידוע') === className);
-                const classSection = milestonesCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן עמדו ילדי כיתה "${className}"`, classData, true);
+                const classSection = milestonesCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}"`, classData, true);
                 milestonesDashboard.appendChild(classSection);
             });
 
