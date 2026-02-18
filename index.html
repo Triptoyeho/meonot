@@ -1441,6 +1441,12 @@
                 const y = margin + (i % 2) * (halfMaxH + gap);
             
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+                // שם המעון בכל עמוד
+                if (milestonesOrgName) {
+                    pdf.setFontSize(10);
+                    pdf.setTextColor(80);
+                    pdf.text(milestonesOrgName, pageW - 10, 8, { align: 'right' });
+                }
             
                 // ===== תאריך מהקובץ (פינה שמאלית עליונה) =====
                 if (milestonesReportDate) {
@@ -2102,7 +2108,7 @@
                     
                     // מרכז גם אופקי וגם אנכי בתוך האזור (כולל אחרי trim)
                     const x = (pageWidth - imgWidth) / 2;
-                    const titleOffset = (i === 0) ? 8 : 0;
+                    const y = (i === 0) ? 22 : margin;
                     const y = margin + titleOffset + (maxHeight - imgHeight) / 2;
 
                     
@@ -2139,6 +2145,12 @@
                     }
 
                     pdf.addImage(imgData, 'JPEG', x, y, imgWidth, imgHeight);
+                    // שם המעון בכל עמוד
+                    if (subjectiveOrgName) {
+                        pdf.setFontSize(10);
+                        pdf.setTextColor(80);
+                        pdf.text(subjectiveOrgName, pageWidth - 10, 8, { align: 'right' });
+                    }
                     // ===== תאריך בפינה שמאלית עליונה =====
                     // ===== תאריך מהקובץ =====
                     if (subjectiveReportDate) {
