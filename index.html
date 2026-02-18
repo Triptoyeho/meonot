@@ -1066,14 +1066,15 @@
                 return results;
             }
 
+            // ✅ מציגים "עם קושי" = ערך שאינו 0 (המשלים של "עמד")
             unusualColumns.forEach(col => {
-                let zeroCount = 0;
+                let diffCount = 0;
                 data.forEach(row => {
-                    if (Number(row[col]) === 0) zeroCount++;
+                    if (Number(row[col]) !== 0) diffCount++;
                 });
                 results[hebrewNames[col]] = {
-                    percentage: (zeroCount / total) * 100,
-                    count: zeroCount,
+                    percentage: (diffCount / total) * 100,
+                    count: diffCount,
                     total: total
                 };
             });
