@@ -1131,12 +1131,12 @@
             milestonesCharts = {};
             milestonesSectionsData = {};
 
-            const generalSection = milestonesCreateSection('general', `אבני דרך התפתחותיות בהן עמדו ילדי מעון "${milestonesOrgName}"`, milestonesAllData);
+            const generalSection = milestonesCreateSection('general', `אבני דרך התפתחותיות בהן לא עמדו ילדי מעון "${milestonesOrgName}"`, milestonesAllData);
             milestonesDashboard.appendChild(generalSection);
 
             classes.forEach((className, index) => {
                 const classData = milestonesAllData.filter(r => (r['clinic_name'] || 'לא ידוע') === className);
-                const classSection = milestonesCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן עמדו ילדי כיתה "${className}"`, classData, true);
+                const classSection = milestonesCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}"`, classData, true);
                 milestonesDashboard.appendChild(classSection);
             });
 
@@ -2474,7 +2474,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
 
             // סעיף כללי של המעון
             const orgName = comparisonSelectedOrg;
-            const generalSection = comparisonCreateSection('general', `אבני דרך התפתחותיות בהן עמדו ילדי מעון "${orgName}"`, orgData, false, nationalPercentages);
+            const generalSection = comparisonCreateSection('general', `אבני דרך התפתחותיות בהן לא עמדו ילדי מעון "${orgName}"`, orgData, false, nationalPercentages);
             comparisonDashboard.appendChild(generalSection);
 
             // קבץ לפי כיתה
@@ -2485,7 +2485,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 const classType = classData[0]?.clinic_type || 'לא מסווג';
                 console.log(`🔍 Class ${index}: className="${className}", classType="${classType}"`);
                 console.log(`   First row clinic_type: "${classData[0]?.clinic_type}"`);
-                const classSection = comparisonCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן עמדו ילדי כיתה "${className}" (${classType})`, classData, true, nationalPercentages);
+                const classSection = comparisonCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}" (${classType})`, classData, true, nationalPercentages);
                 comparisonDashboard.appendChild(classSection);
             });
 
