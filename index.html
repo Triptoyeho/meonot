@@ -2306,6 +2306,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
         let comparisonSelectedOrg = null;
         let comparisonCharts = {};
         let comparisonSectionsData = {};
+        let comparisonReportDate = '';
         let comparisonUploadArea, comparisonFileInput, comparisonOrgSelect, comparisonAnalyzeBtn, comparisonLoading, comparisonDashboard, comparisonUploadCard;
 
         function initComparisonApp() {
@@ -2365,6 +2366,12 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                                 org_name: row.org_name ? row.org_name.trim() : row.org_name
                             }));
                             comparisonPopulateOrgSelect();
+                            // ===== שמירת תאריך ראשון מהקובץ =====
+                            if (results.data && results.data.length > 0 && results.data[0]['Date']) {
+                              comparisonReportDate = formatDateFromExcelCell(results.data[0]?.Date);
+                            } else {
+                              comparisonReportDate = '';
+                            }
                             comparisonLoading.style.display = 'none';
                         }
                     });
@@ -2383,6 +2390,12 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                             org_name: row.org_name ? row.org_name.trim() : row.org_name
                         }));
                         comparisonPopulateOrgSelect();
+                        // ===== שמירת תאריך ראשון מהקובץ =====
+                        if (rawData && rawData.length > 0 && rawData[0]['Date']) {
+                          comparisonReportDate = formatDateFromExcelCell(rawData[0]?.Date);
+                        } else {
+                          comparisonReportDate = '';
+                        }
                         comparisonLoading.style.display = 'none';
                     } catch (error) {
                         alert('שגיאה בקריאת הקובץ');
@@ -2857,6 +2870,13 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 const y = margin + headerPad + (i % 2) * (halfMaxH + gap);
             
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
+                // ===== תאריך מהקובץ (פינה שמאלית עליונה) =====
+                if (comparisonReportDate) {
+                  pdf.setFontSize(9);
+                  pdf.setTextColor(120);
+                  pdf.text(String(comparisonReportDate), 8, 8);
+                }
+
             } // ✅ סוגר של ה-for
             
             pdf.save(`דוח_מעון_${comparisonSelectedOrg}.pdf`);
