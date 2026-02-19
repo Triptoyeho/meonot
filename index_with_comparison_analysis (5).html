@@ -2132,8 +2132,115 @@ const margin = 10;
             pdf.addImage(img, 'PNG', 10, 8, w, h);
         }
 
-
-
+        // ================================
+        // COMPARISON ONLY: PDF header with logos
+        // (does NOT affect other exports)
+        // ================================
+        
+        const COMPARISON_LOGO_LEFT_SRC  = 'branco.jpg';
+        const COMPARISON_LOGO_RIGHT_SRC = 'link_car.png';
+        
+        let _comparisonLogoCache = null;
+        
+        function _loadImageMeta(src) {
+          return new Promise((resolve) => {
+            const img = new Image();
+            img.crossOrigin = 'anonymous';
+            img.onload = () => resolve({ ok: true, img });
+            img.onerror = () => resolve({ ok: false, img: null });
+            img.src = src;
+          });
+        }
+        
+        async function _imgToDataURLWithMeta(src) {
+          const res = await _loadImageMeta(src);
+          if (!res.ok || !res.img) return null;
+        
+          const img = res.img;
+        
+          // Canvas -> DataURL (PNG)
+          const c = document.createElement('canvas');
+          const ctx = c.getContext('2d');
+        
+          // שומר יחס ומגדיל קצת חדות
+          const maxW = 900;
+          const scale = Math.min(1, maxW / img.naturalWidth);
+        
+          c.width = Math.max(1, Math.round(img.naturalWidth * scale));
+          c.height = Math.max(1, Math.round(img.naturalHeight * scale));
+        
+          ctx.clearRect(0, 0, c.width, c.height);
+          ctx.drawImage(img, 0, 0, c.width, c.height);
+        
+          return {
+            dataUrl: c.toDataURL('image/png'),
+            w: img.naturalWidth,
+            h: img.naturalHeight
+          };
+        }
+        
+        async function ensureComparisonLogoCache() {
+          if (_comparisonLogoCache) return _comparisonLogoCache;
+        
+          const [left, right] = await Promise.all([
+            _imgToDataURLWithMeta(COMPARISON_LOGO_LEFT_SRC),
+            _imgToDataURLWithMeta(COMPARISON_LOGO_RIGHT_SRC)
+          ]);
+        
+          _comparisonLogoCache = { left, right };
+          return _comparisonLogoCache;
+        }
+        
+        function pdfAddComparisonHeader(pdf, pageWidth, orgName) {
+          if (!pdf) return;
+        
+          // 1) שם מעון (כמו הקיים) — נשאר אותו רעיון של Canvas כדי שהעברית תצא טוב
+          if (orgName) {
+            const name = String(orgName).trim();
+            if (name) {
+              const c = document.createElement('canvas');
+              const ctx = c.getContext('2d');
+        
+              c.width = 1200;
+              c.height = 25;
+        
+              ctx.fillStyle = '#ffffff';
+              ctx.fillRect(0, 0, c.width, c.height);
+        
+              ctx.fillStyle = '#111827';
+              ctx.font = 'bold 16px Heebo, Arial';
+              ctx.textAlign = 'right';
+              ctx.textBaseline = 'middle';
+        
+              ctx.fillText(name, c.width - 20, c.height / 2);
+        
+              const img = c.toDataURL('image/png');
+              const w = pageWidth - 20;
+              const h = (c.height * w) / c.width;
+        
+              pdf.addImage(img, 'PNG', 10, 8, w, h);
+            }
+          }
+        
+          // 2) לוגואים למעלה (רק אם הצלחנו לטעון)
+          if (!_comparisonLogoCache) return;
+        
+          const y = 6;              // גובה עליון
+          const logoH = 8;          // גובה לוגו ב-mm
+          const padX = 10;          // ריווח מהשוליים
+        
+          const left = _comparisonLogoCache.left;
+          if (left && left.dataUrl && left.w && left.h) {
+            const logoW = logoH * (left.w / left.h);
+            pdf.addImage(left.dataUrl, 'PNG', padX, y, logoW, logoH);
+          }
+        
+          const right = _comparisonLogoCache.right;
+          if (right && right.dataUrl && right.w && right.h) {
+            const logoW = logoH * (right.w / right.h);
+            pdf.addImage(right.dataUrl, 'PNG', pageWidth - padX - logoW, y, logoW, logoH);
+          }
+        }
 
         async function subjectiveExportPDF() {
             if (subjectiveGroupElements.length === 0) return;
@@ -2794,9 +2901,10 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
             const pdf = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
             const pageW = pdf.internal.pageSize.getWidth();
             const pageH = pdf.internal.pageSize.getHeight();
+            await ensureComparisonLogoCache();
         
             // כותרת: שם המעון בכל עמוד
-            pdfAddOrgHeader(pdf, pageW, comparisonSelectedOrg);
+            pdfAddComparisonHeader(pdf, pageW, comparisonSelectedOrg);
             const margin = 10;
             const topMargin = 18; // ✅ הקטנה משמעותית - רק 18 מ"מ
             const gap = 8; // רווח בין שני סקשנים באותו עמוד
@@ -2838,7 +2946,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 if (i > 0 && i % 2 === 0) pdf.addPage();
             
                 // כותרת: שם המעון בכל עמוד חדש
-                pdfAddOrgHeader(pdf, pageW, comparisonSelectedOrg);
+                pdfAddComparisonHeader(pdf, pageW, comparisonSelectedOrg);
                 // חישוב התאמת גודל לתוך חצי עמוד
                 const imgData = canvas.toDataURL('image/jpeg', 0.95);
             
