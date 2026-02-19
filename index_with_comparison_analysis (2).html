@@ -2799,9 +2799,11 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
             pdfAddOrgHeader(pdf, pageW, comparisonSelectedOrg);
             const margin = 10;
             const gap = 8; // רווח בין שני סקשנים באותו עמוד
+            const headerPad = 6;
         
             // גובה מקסימלי לכל "חצי עמוד" (2 כיתות בדף)
-            const halfMaxH = (pageH - margin * 2 - gap) / 2;
+            const halfMaxH = (pageH - margin * 2 - gap - headerPad) / 2;
+
         
             // כדי שזה ייראה כמו באתר: מצלמים HTML עם html2canvas
             
@@ -2852,7 +2854,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 }
             
                 const x = (pageW - imgW) / 2;
-                const y = margin + (i % 2) * (halfMaxH + gap);
+                const y = margin + headerPad + (i % 2) * (halfMaxH + gap);
             
                 pdf.addImage(imgData, 'JPEG', x, y, imgW, imgH);
             } // ✅ סוגר של ה-for
