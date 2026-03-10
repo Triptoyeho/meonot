@@ -2363,7 +2363,9 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                             // סנה רווחים מ-org_name
                             comparisonAllData = results.data.map(row => ({
                                 ...row,
-                                org_name: row.org_name ? row.org_name.trim() : row.org_name
+                                org_name: row.org_name ? String(row.org_name).trim() : '',
+                                clinic_name: row.clinic_name ? String(row.clinic_name).trim() : '',
+                                clinic_type: row.clinic_type ? String(row.clinic_type).trim() : ''
                             }));
                             comparisonPopulateOrgSelect();
                             // ===== שמירת תאריך ראשון מהקובץ =====
@@ -2387,7 +2389,9 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                         // סנה רווחים מ-org_name
                         comparisonAllData = rawData.map(row => ({
                             ...row,
-                            org_name: row.org_name ? row.org_name.trim() : row.org_name
+                            org_name: row.org_name ? String(row.org_name).trim() : '',
+                            clinic_name: row.clinic_name ? String(row.clinic_name).trim() : '',
+                            clinic_type: row.clinic_type ? String(row.clinic_type).trim() : ''
                         }));
                         comparisonPopulateOrgSelect();
                         // ===== שמירת תאריך ראשון מהקובץ =====
@@ -2431,7 +2435,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
             };
 
             // אתחל את nationalStats לכל סיווג
-            const classTypes = [...new Set(allData.map(r => r.clinic_type).filter(Boolean))];
+            const classTypes = [...new Set(allData.map(r => String(r.clinic_type || '').trim()).filter(Boolean))];
             classTypes.forEach(classType => {
                 nationalStats[classType] = {};
                 unusualColumns.forEach(col => {
@@ -2441,7 +2445,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
 
             // סופר את כל הילדים עם קושי בכל סיווג
             classTypes.forEach(classType => {
-                const classTypeData = allData.filter(r => r.clinic_type === classType);
+                const classTypeData = allData.filter(r => String(r.clinic_type || '').trim() === classType);
                 const total = classTypeData.length;
 
                 unusualColumns.forEach(col => {
@@ -2495,7 +2499,8 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
 
             classes.forEach((className, index) => {
                 const classData = orgData.filter(r => (r['clinic_name'] || 'לא ידוע') === className);
-                const classType = classData[0]?.clinic_type || 'לא מסווג';
+                const uniqueTypes = [...new Set(classData.map(r => String(r.clinic_type || '').trim()).filter(Boolean))];
+                const classType = uniqueTypes.length === 1 ? uniqueTypes[0]: (uniqueTypes.length > 1 ? uniqueTypes.join(' / ') : 'לא מסווג');
                 console.log(`🔍 Class ${index}: className="${className}", classType="${classType}"`);
                 console.log(`   First row clinic_type: "${classData[0]?.clinic_type}"`);
                 const classSection = comparisonCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}" (${classType})`, classData, true, nationalPercentages);
@@ -2526,8 +2531,25 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
         function comparisonCreateSection(id, title, data, isClass = false, nationalPercentages = {}) {
             const stats = comparisonGetStats(data);
             const percentages = comparisonCalculatePercentages(data);
-            const classType = data[0]?.clinic_type || 'לא מסווג';
-            comparisonSectionsData[id] = { data, stats, percentages, title, nationalPercentages, classType };
+            const uniqueTypes = [...new Set(
+                data
+                    .map(r => String(r.clinic_type || '').trim())
+                    .filter(Boolean)
+            )];
+            
+            const classType =
+                uniqueTypes.length === 1
+                    ? uniqueTypes[0]
+                    : (uniqueTypes.length > 1 ? uniqueTypes.join(' / ') : 'לא מסווג');
+            
+            comparisonSectionsData[id] = {
+                data,
+                stats,
+                percentages,
+                title,
+                nationalPercentages,
+                classType
+            };
 
             const section = document.createElement('div');
             section.className = `section ${isClass ? 'class-section' : ''}`;
