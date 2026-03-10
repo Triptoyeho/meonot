@@ -2462,6 +2462,31 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
             return nationalStats;
         }
 
+        function comparisonCalculateOverallNationalPercentages(allData) {
+            const overallStats = {};
+            const unusualColumns = ['UnusualSocial', 'UnusualFineMotor', 'UnusualLanguage', 'UnusualGrossMotor'];
+            const hebrewNames = {
+                'UnusualSocial': 'חברה',
+                'UnusualLanguage': 'שפה',
+                'UnusualGrossMotor': 'מוטוריקה גסה',
+                'UnusualFineMotor': 'מוטוריקה עדינה'
+            };
+        
+            const total = allData.length;
+        
+            unusualColumns.forEach(col => {
+                let diffCount = 0;
+                allData.forEach(row => {
+                    if (Number(row[col]) !== 0) diffCount++;
+                });
+        
+                overallStats[hebrewNames[col]] = total > 0 ? (diffCount / total) * 100 : 0;
+            });
+        
+            console.log('📊 Overall national percentages calculated:', overallStats);
+            return overallStats;
+        }
+
         function comparisonAnalyzeData() {
             if (!comparisonAllData || !comparisonSelectedOrg) {
                 alert('אנא העלה קובץ ובחר מעון');
@@ -2488,10 +2513,11 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
 
             // חשב אחוזי הרשות מכל הנתונים בקובץ
             const nationalPercentages = comparisonCalculateNationalPercentages(comparisonAllData);
+            const overallNationalPercentages = comparisonCalculateOverallNationalPercentages(comparisonAllData);
 
             // סעיף כללי של המעון
             const orgName = comparisonSelectedOrg;
-            const generalSection = comparisonCreateSection('general', `אבני דרך התפתחותיות בהן לא עמדו ילדי מעון "${orgName}"`, orgData, false, nationalPercentages);
+            const generalSection = comparisonCreateSection('general', `אבני דרך התפתחותיות בהן לא עמדו ילדי מעון "${orgName}"`, orgData,false, overallNationalPercentages, true);
             comparisonDashboard.appendChild(generalSection);
 
             // קבץ לפי כיתה
@@ -2503,7 +2529,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 const classType = uniqueTypes.length === 1 ? uniqueTypes[0]: (uniqueTypes.length > 1 ? uniqueTypes.join(' / ') : 'לא מסווג');
                 console.log(`🔍 Class ${index}: className="${className}", classType="${classType}"`);
                 console.log(`   First row clinic_type: "${classData[0]?.clinic_type}"`);
-                const classSection = comparisonCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}" (${classType})`, classData, true, nationalPercentages);
+                const classSection = comparisonCreateSection(`class_${index}`, `אבני דרך התפתחותיות בהן לא עמדו ילדי כיתה "${className}" (${classType})`, classData, true, nationalPercentages, false);
                 comparisonDashboard.appendChild(classSection);
             });
 
@@ -2528,7 +2554,7 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
             }, 100);
         }
 
-        function comparisonCreateSection(id, title, data, isClass = false, nationalPercentages = {}) {
+        function comparisonCreateSection(id, title, data, isClass = false, nationalPercentages = {}, useOverallNational = false) {
             const stats = comparisonGetStats(data);
             const percentages = comparisonCalculatePercentages(data);
             const uniqueTypes = [...new Set(
@@ -2548,7 +2574,8 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
                 percentages,
                 title,
                 nationalPercentages,
-                classType
+                classType,
+                useOverallNational
             };
 
             const section = document.createElement('div');
@@ -2695,7 +2722,20 @@ progressFill.style.width = `${((i + 1) / subjectiveGroupElements.length) * 90}%`
 
             // הערכים של הרשות (אחוזים בגובה הנכון על ציר Y)
             const nationalValues = order.map(name => {
-                return nationalPercentages[classType] ? nationalPercentages[classType][name] : 0;
+            
+                let nationalValue;
+            
+                if (sectionData.useOverallNational) {
+                    // ממוצע רשותי כללי (לגרף של כל המעון)
+                    nationalValue = nationalPercentages[name] || 0;
+                } else {
+                    // ממוצע רשותי לפי סיווג כיתה
+                    nationalValue = nationalPercentages[classType]
+                        ? nationalPercentages[classType][name]
+                        : 0;
+                }
+            
+                return nationalValue;
             });
 
             console.log('🔴 National values for chart:', nationalValues, 'classType:', classType);
